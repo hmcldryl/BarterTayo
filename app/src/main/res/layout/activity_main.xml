@@ -39,6 +39,7 @@
             android:id="@+id/fab_addBarter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:backgroundTint="@color/colorPrimary"
             android:src="@drawable/ic_addbarter_icon"
             android:tint="@color/iconTint"
             app:fabAlignmentMode="end"
