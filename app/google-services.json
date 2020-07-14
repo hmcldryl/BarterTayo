@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "930570574888",
+    "firebase_url": "https://bartertayo-17888.firebaseio.com",
+    "project_id": "bartertayo-17888",
+    "storage_bucket": "bartertayo-17888.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:930570574888:android:3aa8cb115635538040691d",
+        "android_client_info": {
+          "package_name": "com.opustech.bartertayo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "930570574888-odp7v71s9vjvma89k2p6igpn4dv7k0ir.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.opustech.bartertayo",
+            "certificate_hash": "dcea594f08d8a3a27a66b42ceff9d68d6b54622e"
+          }
+        },
+        {
+          "client_id": "930570574888-bpt6e7nu1li91vqeb0u4sk4rfgrf8lr3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDAVZ99opLWkFBSfCX16_xfkIjRpBGzrBI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "930570574888-bpt6e7nu1li91vqeb0u4sk4rfgrf8lr3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
