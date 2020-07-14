@@ -9,6 +9,8 @@
     <color name="colorBackgroundAppBar">#f4b41a</color>
 
     <color name="textColor">#121212</color>
+    <color name="textColorHint">#80121212</color>
+    <color name="textColorButton">#121212</color>
     <color name="textColorDark">#f4b41a</color>
 
     <color name="iconTint">#121212</color>
