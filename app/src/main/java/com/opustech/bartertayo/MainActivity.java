@@ -1,15 +1,18 @@
 package com.opustech.bartertayo;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.opustech.bartertayo.ui.LoginActivity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -25,14 +28,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private BottomAppBar bottomAppBar;
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
-    private FirebaseAuth mAuth;
+    private FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mAuth = FirebaseAuth.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
 
         drawerLayout = findViewById(R.id.main_container);
         bottomAppBar = findViewById(R.id.main_bottomAppBar);
@@ -55,9 +58,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onStart() {
         super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        //updateUI(currentUser);
+        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+        if (currentUser == null) {
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
+        }
     }
 
     @Override
@@ -69,11 +76,44 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        return false;
+        int id = item.getItemId();
+
+        if (id == R.id.btn_logout) {
+            logoutUser();
+        }
+        else if (id == R.id.btn_home) {
+            Toast.makeText(this, "Home", Toast.LENGTH_SHORT).show();
+        }
+        else if (id == R.id.btn_profile) {
+            Toast.makeText(this, "Profile", Toast.LENGTH_SHORT).show();
+        }
+        else if (id == R.id.btn_messages) {
+            Toast.makeText(this, "Messages", Toast.LENGTH_SHORT).show();
+        }
+        else if (id == R.id.btn_notifications) {
+            Toast.makeText(this, "Notifications", Toast.LENGTH_SHORT).show();
+        }
+        else if (id == R.id.btn_help) {
+            Toast.makeText(this, "Help", Toast.LENGTH_SHORT).show();
+        }
+        return true;
     }
 
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
 
+    }
+
+    private void logoutUser() {
+        firebaseAuth.signOut();
+        Toast.makeText(this, "Signing out...", Toast.LENGTH_SHORT).show();
+        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+        if (currentUser == null) {
+            Toast.makeText(this, "Signed out.", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
+        }
     }
 }

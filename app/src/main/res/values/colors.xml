@@ -14,4 +14,6 @@
     <color name="textColorDark">#f4b41a</color>
 
     <color name="iconTint">#121212</color>
+    <color name="iconLikeTint">#CC3D5C</color>
+    <color name="iconDislikeTint">#121212</color>
 </resources>

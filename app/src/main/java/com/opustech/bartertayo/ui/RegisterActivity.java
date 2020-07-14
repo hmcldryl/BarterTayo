@@ -22,7 +22,7 @@ import com.opustech.bartertayo.SetupActivity;
 public class RegisterActivity extends AppCompatActivity {
 
     private Button registerBtn;
-    private EditText regFirstname, regLastname, regPassword, regEmail, regPasswordConfirm;
+    private EditText regFirstName, regLastName, regPassword, regEmail, regPasswordConfirm;
     private ProgressBar regLoading;
     private FirebaseAuth firebaseAuth;
 
@@ -35,8 +35,6 @@ public class RegisterActivity extends AppCompatActivity {
 
         registerBtn = findViewById(R.id.btnRegister);
         regLoading = findViewById(R.id.regLoading);
-        regFirstname = findViewById(R.id.regFirstName);
-        regLastname = findViewById(R.id.regLastName);
         regPassword = findViewById(R.id.regPassword);
         regPasswordConfirm = findViewById(R.id.regConfirmPassword);
         regEmail = findViewById(R.id.regEmail);
@@ -48,8 +46,6 @@ public class RegisterActivity extends AppCompatActivity {
                 registerBtn.setVisibility(View.GONE);
 
                 String user_email = regEmail.getText().toString().trim();
-                String first_name = regFirstname.getText().toString();
-                String last_name = regLastname.getText().toString();
                 String user_password = regPassword.getText().toString().trim();
                 String user_passwordConfirm = regPasswordConfirm.getText().toString().trim();
 
@@ -58,16 +54,7 @@ public class RegisterActivity extends AppCompatActivity {
                     regEmail.setError("Please enter a valid e-mail address (someone@sample.com).");
                     regLoading.setVisibility(View.GONE);
                     registerBtn.setVisibility(View.VISIBLE);
-                } else if (first_name.isEmpty()) {
-                    regPassword.setError("Please enter a first name.");
-                    regLoading.setVisibility(View.GONE);
-                    registerBtn.setVisibility(View.VISIBLE);
-                } else if (last_name.isEmpty()) {
-                    regPassword.setError("Please enter a last name.");
-                    regLoading.setVisibility(View.GONE);
-                    registerBtn.setVisibility(View.VISIBLE);
                 } else if (user_password.isEmpty() && user_passwordConfirm.isEmpty()) {
-                    Toast.makeText(RegisterActivity.this, "Please enter and confirm your password.", Toast.LENGTH_SHORT).show();
                     regPassword.setError("Please enter and confirm your password.");
                     regPasswordConfirm.setError("Please enter and confirm your password.");
                     regLoading.setVisibility(View.GONE);
@@ -77,24 +64,26 @@ public class RegisterActivity extends AppCompatActivity {
                     regLoading.setVisibility(View.GONE);
                     registerBtn.setVisibility(View.VISIBLE);
                 } else {
-                    createAccount(user_email, user_password, first_name, last_name);
+                    createAccount(user_email, user_password);
                 }
 
             }
         });
     }
 
-    private void createAccount(String user_email, String user_password, String first_name, String last_name) {
+    private void createAccount(String user_email, String user_password) {
         firebaseAuth.createUserWithEmailAndPassword(user_email, user_password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Toast.makeText(RegisterActivity.this, "Success.", Toast.LENGTH_SHORT).show();
-                            startSetupActivity();
                             regLoading.setVisibility(View.GONE);
                             registerBtn.setVisibility(View.VISIBLE);
                             FirebaseUser user = firebaseAuth.getCurrentUser();
+                            if (user != null) {
+                            startSetupActivity();
+                            }
                         } else {
                             Toast.makeText(RegisterActivity.this, "Error: " + task.getException(), Toast.LENGTH_SHORT).show();
                             regLoading.setVisibility(View.GONE);
