@@ -65,6 +65,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             startActivity(intent);
             finish();
         }
+        else {
+            updateUI();
+        }
     }
 
     @Override
@@ -104,6 +107,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
+    private void updateUI() {
+
+    }
+
     private void logoutUser() {
         firebaseAuth.signOut();
         Toast.makeText(this, "Signing out...", Toast.LENGTH_SHORT).show();
@@ -113,6 +120,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             finish();
         }
     }

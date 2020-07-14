@@ -55,7 +55,7 @@
         android:background="@drawable/background_drawer"
         app:headerLayout="@layout/nav_header_main"
         app:itemBackground="@drawable/background_drawer_item"
-        app:itemIconSize="32dp"
+        app:itemIconSize="28dp"
         app:itemIconTint="@color/iconTint"
         app:itemMaxLines="1"
         app:itemTextColor="@color/textColor"

@@ -9,7 +9,7 @@
     tools:context=".ui.RegisterActivity">
 
     <RelativeLayout
-        android:layout_width="275dp"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true">
@@ -22,7 +22,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/montserrat"
+                android:fontFamily="@font/montserrat_bold"
                 android:text="Additional Details"
                 android:textAlignment="center"
                 android:textColor="@color/textColor"
@@ -31,7 +31,15 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
+                android:fontFamily="@font/montserrat"
+                android:text="- Step 2 -"
+                android:textAlignment="center"
+                android:textColor="@color/textColor"
+                android:textSize="20sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:fontFamily="@font/montserrat"
                 android:text="Enter additional details to complete the sign up process."
                 android:textAlignment="center"
@@ -40,20 +48,21 @@
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/regUserProfilePhoto"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
+                android:layout_width="175dp"
+                android:layout_height="175dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:background="@drawable/ic_placeholder_userphoto"
-                android:src="@drawable/ic_placeholder_userphoto"
-                android:layout_gravity="center_horizontal"/>
+                android:src="@drawable/ic_placeholder_userphoto" />
 
             <ProgressBar
                 android:id="@+id/imageLoading"
                 android:layout_width="200dp"
-                android:visibility="gone"
-                android:layout_gravity="center_horizontal"
                 android:layout_height="200dp"
-                android:layout_marginBottom="10dp"/>
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="10dp"
+                android:visibility="gone" />
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -63,7 +72,7 @@
                 app:boxStrokeColor="@color/iconTint"
                 app:hintEnabled="true"
                 app:hintTextColor="@color/textColorHint"
-                app:startIconDrawable="@drawable/ic_small_email">
+                app:startIconDrawable="@drawable/ic_small_displayname">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/regDisplayName"
@@ -122,7 +131,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="MM/dd/yyyy"
+                android:hint="Birth Date"
                 android:textColorHint="@color/textColorHint"
                 app:boxStrokeColor="@color/iconTint"
                 app:hintEnabled="true"
@@ -139,21 +148,40 @@
                     android:textSize="15sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <Button
+            <androidx.cardview.widget.CardView
                 android:id="@+id/btnContinue"
-                style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:layout_gravity="center"
-                android:layout_marginTop="10dp"
                 android:clickable="true"
-                android:drawableEnd="@drawable/ic_small_signup"
-                android:drawableTint="@color/iconTint"
                 android:focusable="true"
-                android:fontFamily="@font/montserrat_bold"
-                android:text="CONTINUE"
-                android:textColor="@color/textColorButton"
-                android:textSize="20sp" />
+                android:foreground="?android:attr/selectableItemBackground"
+                app:cardBackgroundColor="@color/colorPrimary"
+                app:cardCornerRadius="6dp"
+                app:cardElevation="8dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/button_outline">
+
+                    <TextView
+                        android:layout_width="250dp"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_gravity="center"
+                        android:clickable="true"
+                        android:drawableEnd="@drawable/ic_small_signup"
+                        android:drawableTint="@color/iconTint"
+                        android:focusable="true"
+                        android:fontFamily="@font/montserrat_bold"
+                        android:text="Sign Up"
+                        android:textAlignment="center"
+                        android:textColor="@color/textColorButton"
+                        android:textSize="20sp" />
+                </RelativeLayout>
+
+            </androidx.cardview.widget.CardView>
 
             <ProgressBar
                 android:id="@+id/regLoading"
