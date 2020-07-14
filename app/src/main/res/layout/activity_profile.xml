@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_body"
+    tools:context=".ProfileActivity">
+
+    <LinearLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@drawable/background_header">
+
+        <ImageButton
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/ic_button_back"
+            android:backgroundTint="@color/iconTint" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:fontFamily="@font/montserrat_bold"
+            android:text="Profile"
+            android:textColor="@color/textColor"
+            android:textSize="24sp" />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/body"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/header">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/userProfilePhoto"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_marginBottom="10dp"
+            android:src="@drawable/ic_placeholder_userphoto"
+            android:layout_marginTop="10dp"
+            android:layout_centerHorizontal="true"/>
+
+        <ImageButton
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="20dp"
+            android:layout_toEndOf="@+id/userProfilePhoto"
+            android:background="@drawable/ic_button_uploadphoto"
+            android:backgroundTint="@color/iconTint" />
+
+        <TextView
+            android:id="@+id/userProfileName"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/userProfilePhoto"
+            android:textAlignment="center"
+            android:fontFamily="@font/montserrat_bold"
+            android:text="user_name"
+            android:textColor="@color/textColor"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/userProfileFollowers"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/userProfileName"
+            android:textAlignment="center"
+            android:fontFamily="@font/montserrat"
+            android:text="follower_count"
+            android:textColor="@color/textColor"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/userProfileBio"
+            android:layout_width="300dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:maxLines="3"
+            android:ellipsize="end"
+            android:layout_below="@+id/userProfileFollowers"
+            android:textAlignment="center"
+            android:fontFamily="@font/montserrat"
+            android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+            android:textColor="@color/textColor"
+            android:textSize="18sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:background="@color/colorPrimary"
+            android:layout_below="@id/userProfileBio"
+            android:layout_height="40dp">
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

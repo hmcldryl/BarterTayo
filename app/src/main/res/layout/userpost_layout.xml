@@ -29,11 +29,12 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginBottom="5dp"
-                    android:src="" />
+                    android:src="@drawable/ic_placeholder_userphoto" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginStart="10dp"
                     android:weightSum="3"
                     android:layout_marginTop="5dp"
                     android:layout_marginEnd="10dp"
@@ -43,20 +44,26 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
+                        android:textSize="14sp"
+                        android:fontFamily="@font/montserrat_bold"
                         android:layout_weight="1"
                         android:text="display_name"/>
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
+                        android:fontFamily="@font/montserrat"
+                        android:textSize="14sp"
                         android:layout_weight="1"
                         android:text="display_name"/>
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
+                        android:textSize="14sp"
+                        android:fontFamily="@font/montserrat"
                         android:layout_weight="1"
-                        android:text="display_name"/>
+                        android:text="followers_count"/>
 
                 </LinearLayout>
 
