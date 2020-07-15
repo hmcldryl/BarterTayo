@@ -14,8 +14,9 @@
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
         android:layout_marginBottom="20dp"
-        android:src="@drawable/ic_placeholder_userphoto" />
+        android:background="@drawable/placeholder_userpicture" />
 
     <TextView
         android:id="@+id/userDisplayNameDrawer"
@@ -26,28 +27,21 @@
         android:maxLines="1"
         android:ellipsize="end"
         android:fontFamily="@font/montserrat_bold"
-        android:text="SAMPLE TEXT"
+        android:text="display_name"
         android:textAlignment="center"
         android:textColor="@color/textColor"
         android:textSize="20sp" />
 
     <TextView
-        android:id="@+id/userBarterScore"
+        android:id="@+id/userBarterScoreDrawer"
         android:layout_width="200dp"
         android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/userDisplayNameDrawer"
-        android:text="SAMPLE TEXT"
+        android:text="barter_score"
         android:textAlignment="center"
         android:textColor="@color/textColor"
         android:textSize="18sp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_marginTop="10dp"
-        android:layout_below="@+id/userBarterScore"
-        android:background="@color/iconTint"
-        android:layout_height="1dp">
-
-    </LinearLayout>
 </RelativeLayout>

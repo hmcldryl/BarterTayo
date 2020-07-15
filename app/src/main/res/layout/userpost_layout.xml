@@ -55,7 +55,7 @@
                         android:fontFamily="@font/montserrat"
                         android:textSize="14sp"
                         android:layout_weight="1"
-                        android:text="display_name"/>
+                        android:text="barter_score"/>
 
                     <TextView
                         android:layout_width="match_parent"

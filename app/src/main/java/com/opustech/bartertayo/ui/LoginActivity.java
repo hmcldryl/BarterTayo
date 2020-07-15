@@ -23,9 +23,10 @@ import com.opustech.bartertayo.R;
 
 public class LoginActivity extends AppCompatActivity {
 
-    EditText loginUser, loginPassword;
-    CardView loginBtn;
-    TextView registerBtn;
+    private EditText loginUser, loginPassword;
+    private CardView loginBtn;
+    private TextView registerBtn;
+    private ProgressBar progressBar;
     private FirebaseAuth firebaseAuth;
 
     @Override
@@ -40,18 +41,25 @@ public class LoginActivity extends AppCompatActivity {
         loginBtn = findViewById(R.id.btnLogin);
         registerBtn = findViewById(R.id.registerBtn);
 
+        progressBar = findViewById(R.id.progressBar);
+
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                loginBtn.setVisibility(View.GONE);
+                progressBar.setVisibility(View.VISIBLE);
                 String user_email = loginUser.getText().toString().trim();
                 String user_password = loginPassword.getText().toString().trim();
 
                 if (user_email.isEmpty()) {
                     loginUser.setError("Please enter username.");
+                    progressBar.setVisibility(View.GONE);
+                    loginBtn.setVisibility(View.VISIBLE);
                 }
                 else if (user_password.isEmpty()) {
                     loginPassword.setError("Please enter password.");
+                    progressBar.setVisibility(View.GONE);
+                    loginBtn.setVisibility(View.VISIBLE);
                 }
                 else {
                     loginUser(user_email, user_password);
@@ -64,6 +72,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent home = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(home);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             }
         });
     }
@@ -92,6 +101,8 @@ public class LoginActivity extends AppCompatActivity {
                                 startMainActivity();
                             }
                         } else {
+                            progressBar.setVisibility(View.GONE);
+                            loginBtn.setVisibility(View.VISIBLE);
                             Toast.makeText(LoginActivity.this, "Error: " + task.getException(), Toast.LENGTH_SHORT).show();
 
                         }

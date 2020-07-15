@@ -5,23 +5,27 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.bottomappbar.BottomAppBar;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.opustech.bartertayo.ui.LoginActivity;
+import com.squareup.picasso.Picasso;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -29,6 +33,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private FirebaseAuth firebaseAuth;
+    private DatabaseReference userRef;
+    private CircleImageView userProfileImage;
+    private TextView userProfileDisplayName, userProfileBarterScore;
+    private String currentUserID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,11 +44,39 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
 
         firebaseAuth = FirebaseAuth.getInstance();
+        currentUserID = firebaseAuth.getCurrentUser().getUid();
+        userRef = FirebaseDatabase.getInstance().getReference().child("Users");
 
         drawerLayout = findViewById(R.id.main_container);
         bottomAppBar = findViewById(R.id.main_bottomAppBar);
         setSupportActionBar(bottomAppBar);
         navigationView = findViewById(R.id.main_navigationdrawer);
+
+        View navView = navigationView.inflateHeaderView(R.layout.nav_header);
+        userProfileImage = navView.findViewById(R.id.userProfilePhotoDrawer);
+        userProfileDisplayName = navView.findViewById(R.id.userDisplayNameDrawer);
+        userProfileBarterScore = navView.findViewById(R.id.userBarterScoreDrawer);
+
+        userRef.child(currentUserID).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    if (snapshot.hasChild("display_name")) {
+                        String display_name = snapshot.child("display_name").getValue().toString();
+                        userProfileDisplayName.setText(display_name);
+                    }
+                    if (snapshot.hasChild("profile_image")) {
+                        String image = snapshot.child("profile_image").getValue().toString();
+                        Picasso.get().load(image).placeholder(R.drawable.placeholder_userpicture).into(userProfileImage);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
         ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(
                 this,
@@ -63,6 +99,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             finish();
         }
         else {

@@ -9,11 +9,4 @@
         android:title="Home"
         app:showAsAction="ifRoom" />
 
-    <item
-        android:id="@+id/navigation_notifications"
-        android:icon="@drawable/ic_notification"
-        android:iconTint="@color/iconTint"
-        android:title="Notification"
-        app:showAsAction="ifRoom" />
-
 </menu>
