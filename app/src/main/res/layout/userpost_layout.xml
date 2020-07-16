@@ -148,21 +148,21 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/background_offer_box"
                 android:paddingTop="5dp"
-                android:visibility="gone"
-                android:background="@drawable/background_offer_box">
+                android:visibility="gone">
 
                 <EditText
                     android:id="@+id/postOfferMessage"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="10dp"
-                    android:textColor="@color/textColor"
                     android:layout_marginEnd="10dp"
-                    android:layout_alignParentStart="true"
                     android:layout_toStartOf="@+id/postOfferPhotoBtn"
                     android:hint="Comment"
+                    android:textColor="@color/textColor"
                     android:textColorHint="@color/textColorHint"
                     android:textSize="14sp" />
 
@@ -170,9 +170,9 @@
                     android:id="@+id/postOfferPhotoBtn"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
-                    android:layout_toStartOf="@+id/postOfferSendBtn"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="5dp"
+                    android:layout_toStartOf="@+id/postOfferSendBtn"
                     android:background="@drawable/ic_button_uploadphoto"
                     android:backgroundTint="#FFFFFF" />
 
@@ -180,8 +180,8 @@
                     android:id="@+id/postOfferSendBtn"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
-                    android:layout_centerVertical="true"
                     android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
                     android:layout_marginStart="5dp"
                     android:layout_marginEnd="10dp"
                     android:background="@drawable/ic_send_comment"
