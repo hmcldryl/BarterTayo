@@ -3,12 +3,12 @@
     <item
         android:state_focused="true"
         android:state_pressed="true"
-        android:drawable="@drawable/ic_responses_dislike_pressed" />
+        android:drawable="@drawable/ic_responses_share_pressed" />
 
     <item
         android:state_focused="false"
         android:state_pressed="true"
-        android:drawable="@drawable/ic_responses_dislike_pressed" />
+        android:drawable="@drawable/ic_responses_share_pressed" />
 
-    <item android:drawable="@drawable/ic_responses_dislike" />
+    <item android:drawable="@drawable/ic_responses_share" />
 </selector>

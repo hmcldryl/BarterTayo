@@ -2,103 +2,193 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="300dp"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="5dp">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         app:cardCornerRadius="4dp"
         app:cardElevation="8dp">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <LinearLayout
+                android:id="@+id/postHeaderBar"
                 android:layout_width="match_parent"
                 android:layout_height="75dp"
-                android:layout_alignParentTop="true"
                 android:background="@color/colorPrimary"
                 android:orientation="horizontal">
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:layout_width="65dp"
-                    android:layout_height="65dp"
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
                     android:layout_marginStart="10dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:src="@drawable/ic_placeholder_userphoto" />
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/placeholder_userpicture" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginStart="10dp"
-                    android:weightSum="3"
                     android:layout_marginTop="5dp"
                     android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="5dp"
                     android:orientation="vertical"
-                    android:layout_marginBottom="5dp">
+                    android:weightSum="3">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:textSize="14sp"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
                         android:fontFamily="@font/montserrat_bold"
-                        android:layout_weight="1"
-                        android:text="display_name"/>
+                        android:maxLines="1"
+                        android:text="display_name"
+                        android:textColor="@color/textColor"
+                        android:textSize="14sp" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:fontFamily="@font/montserrat"
-                        android:textSize="14sp"
                         android:layout_weight="1"
-                        android:text="barter_score"/>
+                        android:ellipsize="end"
+                        android:fontFamily="@font/montserrat"
+                        android:maxLines="1"
+                        android:text="barter_score"
+                        android:textColor="@color/textColor"
+                        android:textSize="14sp" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:textSize="14sp"
-                        android:fontFamily="@font/montserrat"
                         android:layout_weight="1"
-                        android:text="followers_count"/>
+                        android:ellipsize="end"
+                        android:fontFamily="@font/montserrat"
+                        android:maxLines="1"
+                        android:text="followers_count"
+                        android:textColor="@color/textColor"
+                        android:textSize="14sp" />
 
                 </LinearLayout>
 
             </LinearLayout>
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
+                <TextView
+                    android:id="@+id/postCaption"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/montserrat"
+                    android:maxLines="5"
+                    android:scrollHorizontally="true"
+                    android:text="@string/large_text"
+                    android:textColor="@color/textColor"
+                    android:textSize="14sp" />
+
+                <androidx.viewpager.widget.ViewPager
+                    android:id="@+id/postImages"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_below="@+id/postCaption" />
+
+            </RelativeLayout>
 
             <LinearLayout
+                android:id="@+id/postButtonBar"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:weightSum="3"
-                android:layout_alignParentBottom="true"
                 android:background="@color/colorPrimary"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:weightSum="3">
+
+                <ImageButton
+                    android:id="@+id/postLikeBtn"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/colorPrimary"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:src="@drawable/button_responses_like" />
+
+                <ImageButton
+                    android:id="@+id/postOfferButton"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/colorPrimary"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:src="@drawable/button_responses_comment" />
+
                 <ImageButton
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@color/colorPrimary"
-                    android:src="@drawable/button_responses_like"/>
-                <ImageButton
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@color/colorPrimary"
-                    android:src="@drawable/button_responses_dislike"/>
-                <ImageButton
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@color/colorPrimary"
-                    android:src="@drawable/button_responses_offer"/>
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:src="@drawable/button_responses_share" />
             </LinearLayout>
 
-        </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:visibility="gone"
+                android:background="@drawable/background_offer_box">
+
+                <EditText
+                    android:id="@+id/postOfferMessage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="10dp"
+                    android:textColor="@color/textColor"
+                    android:layout_marginEnd="10dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_toStartOf="@+id/postOfferPhotoBtn"
+                    android:hint="Comment"
+                    android:textColorHint="@color/textColorHint"
+                    android:textSize="14sp" />
+
+                <ImageButton
+                    android:id="@+id/postOfferPhotoBtn"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_toStartOf="@+id/postOfferSendBtn"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="5dp"
+                    android:background="@drawable/ic_button_uploadphoto"
+                    android:backgroundTint="#FFFFFF" />
+
+                <ImageButton
+                    android:id="@+id/postOfferSendBtn"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="10dp"
+                    android:background="@drawable/ic_send_comment"
+                    android:backgroundTint="#FFFFFF" />
+            </RelativeLayout>
+
+        </LinearLayout>
     </androidx.cardview.widget.CardView>
 
 </LinearLayout>
