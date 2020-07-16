@@ -1,4 +1,4 @@
-package com.opustech.bartertayo;
+package com.opustech.bartertayo.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,13 +17,15 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.opustech.bartertayo.ui.LoginActivity;
+import com.opustech.bartertayo.R;
 import com.squareup.picasso.Picasso;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -101,8 +103,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             startActivity(intent);
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             finish();
-        }
-        else {
+        } else {
             updateUI();
         }
     }
@@ -117,24 +118,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
+        Fragment fragment;
+        FragmentManager fragmentManager = getSupportFragmentManager();
 
         if (id == R.id.btn_logout) {
             logoutUser();
-        }
-        else if (id == R.id.btn_home) {
-            Toast.makeText(this, "Home", Toast.LENGTH_SHORT).show();
-        }
-        else if (id == R.id.btn_profile) {
-            Toast.makeText(this, "Profile", Toast.LENGTH_SHORT).show();
-        }
-        else if (id == R.id.btn_messages) {
-            Toast.makeText(this, "Messages", Toast.LENGTH_SHORT).show();
-        }
-        else if (id == R.id.btn_notifications) {
-            Toast.makeText(this, "Notifications", Toast.LENGTH_SHORT).show();
-        }
-        else if (id == R.id.btn_help) {
-            Toast.makeText(this, "Help", Toast.LENGTH_SHORT).show();
+        } else if (id == R.id.btn_home) {
+            fragment = new HomeFragment();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.main_hostFragment, fragment)
+                    .commit();
+        } else if (id == R.id.btn_profile) {
+            Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
+            startActivity(intent);
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        } else if (id == R.id.btn_messages) {
+            fragment = new HomeFragment();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.main_hostFragment, fragment)
+                    .commit();
+        } else if (id == R.id.btn_notifications) {
+            fragment = new NotificationsFragment();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.main_hostFragment, fragment)
+                    .commit();
+        } else if (id == R.id.btn_help) {
+            fragment = new HomeFragment();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.main_hostFragment, fragment)
+                    .commit();
         }
         return true;
     }

@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:openDrawer="start">
+    tools:context=".ui.MainActivity"
+    tools:openDrawer="end">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/container"
@@ -20,6 +21,16 @@
             android:layout_height="match_parent"
             app:defaultNavHost="true"
             app:navGraph="@navigation/mobile_navigation" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_addBarter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_addbarter_icon"
+            android:tint="@color/iconTint"
+            app:backgroundTint="@color/colorPrimary"
+            app:fabAlignmentMode="end"
+            app:layout_anchor="@id/main_bottomAppBar" />
 
         <com.google.android.material.bottomappbar.BottomAppBar
             android:id="@+id/main_bottomAppBar"
@@ -35,16 +46,6 @@
             app:menu="@menu/menu_bottomappbar"
             app:navigationIcon="@drawable/ic_navigation_icon" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_addBarter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_addbarter_icon"
-            android:tint="@color/iconTint"
-            app:backgroundTint="@color/colorPrimary"
-            app:fabAlignmentMode="end"
-            app:layout_anchor="@id/main_bottomAppBar" />
-
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <com.google.android.material.navigation.NavigationView
@@ -55,7 +56,6 @@
         android:background="@drawable/background_drawer"
         app:itemBackground="@drawable/background_drawer_item"
         app:itemIconSize="28dp"
-        app:itemIconTint="@color/iconTint"
         app:itemMaxLines="1"
         app:itemTextColor="@color/textColor"
         app:menu="@menu/menu_navigationdrawer" />

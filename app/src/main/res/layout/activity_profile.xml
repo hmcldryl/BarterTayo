@@ -4,13 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background_body"
-    tools:context=".ProfileActivity">
+    tools:context=".ui.ProfileActivity">
 
     <LinearLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:background="@drawable/background_header">
+        android:background="@drawable/background_header"
+        android:elevation="8dp">
 
         <ImageButton
             android:layout_width="50dp"
@@ -42,10 +43,10 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/userProfilePhoto"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:background="@drawable/placeholder_userpicture" />
 
@@ -64,28 +65,64 @@
             android:layout_below="@+id/userProfilePhoto"
             android:layout_centerHorizontal="true"
             android:fontFamily="@font/montserrat_bold"
-            android:text="user_name"
-            android:textAlignment="center"
-            android:textColor="@color/textColor"
-            android:textSize="24sp" />
-
-        <TextView
-            android:id="@+id/userProfileFollowers"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/userProfileName"
-            android:layout_centerHorizontal="true"
-            android:fontFamily="@font/montserrat"
-            android:text="follower_count"
+            android:text="display_name"
             android:textAlignment="center"
             android:textColor="@color/textColor"
             android:textSize="20sp" />
 
         <TextView
+            android:id="@+id/userProfileFullName"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/userProfileName"
+            android:layout_centerHorizontal="true"
+            android:fontFamily="@font/montserrat"
+            android:text="full_name"
+            android:textAlignment="center"
+            android:textColor="@color/textColor"
+            android:textSize="16sp" />
+
+        <LinearLayout
+            android:id="@+id/userScoreAndFollowers"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/userProfileFullName"
+            android:layout_centerHorizontal="true"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <TextView
+                android:id="@+id/userProfileBarterScore"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/montserrat"
+                android:text="barter_score"
+                android:textAlignment="center"
+                android:textColor="@color/textColor"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/userProfileFollowers"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginStart="5dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/montserrat"
+                android:text="follower_count"
+                android:textAlignment="center"
+                android:textColor="@color/textColor"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <TextView
             android:id="@+id/userProfileBio"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/userProfileFollowers"
+            android:layout_below="@+id/userScoreAndFollowers"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
@@ -98,12 +135,21 @@
             android:textSize="18sp" />
 
         <LinearLayout
+            android:id="@+id/userProfilePostBar"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_below="@id/userProfileBio"
-            android:background="@color/colorPrimary">
+            android:background="@color/colorPrimary"
+            android:elevation="8dp"
+            android:orientation="horizontal">
 
         </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/userProfilePosts"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/userProfilePostBar" />
 
     </RelativeLayout>
 

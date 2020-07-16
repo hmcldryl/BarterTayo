@@ -1,8 +1,10 @@
-package com.opustech.bartertayo;
+package com.opustech.bartertayo.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.opustech.bartertayo.R;
 
 public class PostActivity extends AppCompatActivity {
 

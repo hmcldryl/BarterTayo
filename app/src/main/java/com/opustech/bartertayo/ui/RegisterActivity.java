@@ -3,9 +3,7 @@ package com.opustech.bartertayo.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,7 +16,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.opustech.bartertayo.R;
-import com.opustech.bartertayo.SetupActivity;
 
 public class RegisterActivity extends AppCompatActivity {
 
