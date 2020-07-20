@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -23,6 +24,7 @@ import com.squareup.picasso.Picasso;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -31,6 +33,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
+    private Toolbar topAppBar;
     private BottomAppBar bottomAppBar;
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
@@ -51,7 +54,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         drawerLayout = findViewById(R.id.main_container);
         bottomAppBar = findViewById(R.id.main_bottomAppBar);
-        setSupportActionBar(bottomAppBar);
+        topAppBar = findViewById(R.id.main_topAppBar);
+        setSupportActionBar(topAppBar);
         navigationView = findViewById(R.id.main_navigationdrawer);
 
         View navView = navigationView.inflateHeaderView(R.layout.nav_header);
@@ -83,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(
                 this,
                 drawerLayout,
-                bottomAppBar,
+                topAppBar,
                 R.string.openNavDrawer,
                 R.string.closeNavDrawer
         );
@@ -109,13 +113,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-        getMenuInflater().inflate(R.menu.menu_bottomappbar, menu);
-        return true;
-    }
-
-    @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         Fragment fragment;
@@ -123,30 +120,36 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if (id == R.id.btn_logout) {
             logoutUser();
-        } else if (id == R.id.btn_home) {
+            drawerLayout.closeDrawers();
+        } if (id == R.id.btn_home) {
             fragment = new HomeFragment();
             fragmentManager.beginTransaction()
                     .replace(R.id.main_hostFragment, fragment)
                     .commit();
-        } else if (id == R.id.btn_profile) {
+            drawerLayout.closeDrawers();
+        } if (id == R.id.btn_profile) {
             Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
             startActivity(intent);
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-        } else if (id == R.id.btn_messages) {
+            drawerLayout.closeDrawers();
+        } if (id == R.id.btn_messages) {
             fragment = new HomeFragment();
             fragmentManager.beginTransaction()
                     .replace(R.id.main_hostFragment, fragment)
                     .commit();
-        } else if (id == R.id.btn_notifications) {
+            drawerLayout.closeDrawers();
+        } if (id == R.id.btn_notifications) {
             fragment = new NotificationsFragment();
             fragmentManager.beginTransaction()
                     .replace(R.id.main_hostFragment, fragment)
                     .commit();
-        } else if (id == R.id.btn_help) {
+            drawerLayout.closeDrawers();
+        } if (id == R.id.btn_help) {
             fragment = new HomeFragment();
             fragmentManager.beginTransaction()
                     .replace(R.id.main_hostFragment, fragment)
                     .commit();
+            drawerLayout.closeDrawers();
         }
         return true;
     }

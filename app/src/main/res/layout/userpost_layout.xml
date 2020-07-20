@@ -51,7 +51,7 @@
                         android:maxLines="1"
                         android:text="display_name"
                         android:textColor="@color/textColor"
-                        android:textSize="14sp" />
+                        android:textSize="13sp" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -62,7 +62,7 @@
                         android:maxLines="1"
                         android:text="barter_score"
                         android:textColor="@color/textColor"
-                        android:textSize="14sp" />
+                        android:textSize="12sp" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -73,7 +73,7 @@
                         android:maxLines="1"
                         android:text="followers_count"
                         android:textColor="@color/textColor"
-                        android:textSize="14sp" />
+                        android:textSize="12sp" />
 
                 </LinearLayout>
 
@@ -87,7 +87,7 @@
                     android:id="@+id/postCaption"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
+                    android:layout_margin="5dp"
                     android:ellipsize="end"
                     android:fontFamily="@font/montserrat"
                     android:maxLines="5"
@@ -96,71 +96,77 @@
                     android:textColor="@color/textColor"
                     android:textSize="14sp" />
 
-                <androidx.viewpager.widget.ViewPager
+                <ImageView
+                    android:src="@drawable/placeholder_barterpost"
                     android:id="@+id/postImages"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_below="@+id/postCaption" />
 
             </RelativeLayout>
 
-            <LinearLayout
+            <RelativeLayout
                 android:id="@+id/postButtonBar"
+                android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:background="@color/colorPrimary"
-                android:orientation="horizontal"
-                android:weightSum="3">
+                android:orientation="horizontal">
 
                 <ImageButton
                     android:id="@+id/postLikeBtn"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="10dp"
                     android:background="@color/colorPrimary"
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="?android:attr/selectableItemBackground"
                     android:src="@drawable/button_responses_like" />
 
-                <ImageButton
-                    android:id="@+id/postOfferButton"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@color/colorPrimary"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    android:src="@drawable/button_responses_comment" />
+                <TextView
+                    android:id="@+id/postLikeCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:textSize="12sp"
+                    android:textColor="@color/textColor"
+                    android:layout_marginStart="10dp"
+                    android:layout_toEndOf="@+id/postLikeBtn"
+                    android:text="# people like this item." />
 
-                <ImageButton
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@color/colorPrimary"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    android:src="@drawable/button_responses_share" />
-            </LinearLayout>
+            </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/background_offer_box"
-                android:paddingTop="5dp"
-                android:visibility="gone">
+                android:paddingTop="5dp">
+
+                <ImageButton
+                    android:id="@+id/postOfferButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="10dp"
+                    android:background="@drawable/button_responses_comment"
+                    android:clickable="true"
+                    android:focusable="true" />
 
                 <EditText
                     android:id="@+id/postOfferMessage"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
                     android:layout_toStartOf="@+id/postOfferPhotoBtn"
+                    android:inputType="text"
+                    android:layout_toEndOf="@+id/postOfferButton"
+                    android:fontFamily="@font/montserrat"
                     android:hint="Comment"
                     android:textColor="@color/textColor"
                     android:textColorHint="@color/textColorHint"
@@ -168,8 +174,8 @@
 
                 <ImageButton
                     android:id="@+id/postOfferPhotoBtn"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="5dp"
                     android:layout_toStartOf="@+id/postOfferSendBtn"
@@ -178,8 +184,8 @@
 
                 <ImageButton
                     android:id="@+id/postOfferSendBtn"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="5dp"
