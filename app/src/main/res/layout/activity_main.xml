@@ -14,11 +14,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <com.google.android.material.appbar.MaterialToolbar
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:navigationIcon="@drawable/ic_navigation_icon"
+            style="@style/ThemeOverlay.MaterialComponents.Toolbar.Primary"/>
+
         <fragment
             android:id="@+id/main_hostFragment"
             android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="?attr/actionBarSize"
             app:defaultNavHost="true"
             app:navGraph="@navigation/mobile_navigation" />
 
@@ -39,12 +46,12 @@
             android:layout_gravity="bottom"
             app:backgroundTint="@color/colorBackgroundAppBar"
             app:fabAlignmentMode="end"
+            app:hideOnScroll="true"
             app:fabAnimationMode="slide"
             app:fabCradleMargin="10dp"
             app:fabCradleRoundedCornerRadius="30dp"
             app:fabCradleVerticalOffset="10dp"
-            app:menu="@menu/menu_bottomappbar"
-            app:navigationIcon="@drawable/ic_navigation_icon" />
+            app:menu="@menu/menu_bottomappbar"/>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

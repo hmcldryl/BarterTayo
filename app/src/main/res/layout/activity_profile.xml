@@ -9,7 +9,7 @@
     <LinearLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="?attr/actionBarSize"
         android:background="@drawable/background_header"
         android:elevation="8dp">
 
