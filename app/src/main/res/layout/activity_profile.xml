@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_body"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#FFFFFF"
     tools:context=".ui.ProfileActivity">
 
     <LinearLayout
@@ -35,7 +36,8 @@
 
     </LinearLayout>
 
-    <RelativeLayout
+    <LinearLayout
+        android:orientation="vertical"
         android:id="@+id/body"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -45,25 +47,17 @@
             android:id="@+id/userProfilePhoto"
             android:layout_width="150dp"
             android:layout_height="150dp"
-            android:layout_centerHorizontal="true"
+            android:elevation="8dp"
+            android:layout_gravity="center"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:background="@drawable/placeholder_userpicture" />
-
-        <ImageButton
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginTop="20dp"
-            android:layout_toEndOf="@+id/userProfilePhoto"
-            android:background="@drawable/ic_button_uploadphoto"
-            android:backgroundTint="@color/iconTint" />
 
         <TextView
             android:id="@+id/userProfileName"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/userProfilePhoto"
-            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
             android:fontFamily="@font/montserrat_bold"
             android:text="display_name"
             android:textAlignment="center"
@@ -74,45 +68,60 @@
             android:id="@+id/userProfileFullName"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/userProfileName"
-            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
             android:fontFamily="@font/montserrat"
             android:text="full_name"
             android:textAlignment="center"
-            android:textColor="@color/textColor"
+            android:textColor="#BF121212"
             android:textSize="16sp" />
 
+        <com.google.android.material.chip.Chip
+            android:id="@+id/userProfileBarterScore"
+            style="@style/Widget.MaterialComponents.Chip.Entry"
+            android:layout_width="wrap_content"
+            app:chipBackgroundColor="@color/colorPrimary"
+            android:layout_gravity="center"
+            app:chipIcon="@drawable/ic_tab_deal"
+            app:iconStartPadding="5dp"
+            app:checkedIconEnabled="false"
+            android:checkable="false"
+            app:iconEndPadding="5dp"
+            app:chipIconTint="@color/iconTint"
+            app:closeIconEnabled="false"
+            android:layout_height="wrap_content"
+            android:text="barter_score"/>
+
         <LinearLayout
-            android:id="@+id/userScoreAndFollowers"
+            android:id="@+id/userProfileFollow"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:layout_below="@id/userProfileFullName"
-            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
             android:orientation="horizontal"
             android:weightSum="2">
 
-            <TextView
-                android:id="@+id/userProfileBarterScore"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginEnd="5dp"
-                android:layout_weight="1"
-                android:fontFamily="@font/montserrat"
-                android:text="barter_score"
-                android:textAlignment="center"
-                android:textColor="@color/textColor"
-                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/userProfileFollowers"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
                 android:layout_marginStart="5dp"
                 android:layout_weight="1"
                 android:fontFamily="@font/montserrat"
                 android:text="follower_count"
+                android:textAlignment="center"
+                android:textColor="@color/textColor"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/userProfileFollowing"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/montserrat"
+                android:text="following_count"
                 android:textAlignment="center"
                 android:textColor="@color/textColor"
                 android:textSize="16sp" />
@@ -122,36 +131,54 @@
             android:id="@+id/userProfileBio"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/userScoreAndFollowers"
-            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:ellipsize="end"
+            android:maxLength="160"
             android:fontFamily="@font/montserrat"
             android:maxLines="3"
-            android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+            android:text="Sana all barterist."
             android:textAlignment="center"
             android:textColor="@color/textColor"
             android:textSize="18sp" />
 
         <LinearLayout
-            android:id="@+id/userProfilePostBar"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_below="@id/userProfileBio"
-            android:background="@color/colorPrimary"
+            android:layout_height="4dp"
+            android:background="@color/colorPrimary"/>
+
+        <com.google.android.material.tabs.TabLayout
+            style="Widget.MaterialComponents.TabLayout"
+            android:id="@+id/profileTabs"
             android:elevation="8dp"
-            android:orientation="horizontal">
-
-        </LinearLayout>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/userProfilePosts"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/userProfilePostBar" />
+            android:layout_height="wrap_content">
 
-    </RelativeLayout>
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:icon="@drawable/ic_tab_deal"
+                android:text="Posts"
+                android:textAlignment="center"
+                />
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:icon="@drawable/ic_tab_deal"
+                android:layout_height="wrap_content"
+                android:text="Deals"
+                />
+
+        </com.google.android.material.tabs.TabLayout>
+
+        <androidx.viewpager.widget.ViewPager
+            android:layout_width="match_parent"
+            android:background="@drawable/background_body"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/profileTabs" />
+
+    </LinearLayout>
 
 
 </RelativeLayout>

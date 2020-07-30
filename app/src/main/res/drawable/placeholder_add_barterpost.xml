@@ -3,8 +3,6 @@
     <item>
         <shape android:shape="rectangle">
             <solid android:color="@color/colorPrimary" />
-            <stroke
-                android:width="2dp"/>
             <size
                 android:width="300dp"
                 android:height="300dp" />
@@ -13,6 +11,6 @@
     <item
         android:width="100dp"
         android:height="100dp"
-        android:drawable="@drawable/ic_placeholder_userpicture"
+        android:drawable="@drawable/ic_addbarter_icon"
         android:gravity="center" />
 </layer-list>

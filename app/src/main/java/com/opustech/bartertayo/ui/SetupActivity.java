@@ -141,7 +141,10 @@ public class SetupActivity extends AppCompatActivity {
                     hashMap.put("first_name", fname);
                     hashMap.put("last_name", lname);
                     hashMap.put("birth_date", bdate);
-                    hashMap.put("user_bui", "Sana all barterist.");
+                    hashMap.put("bio", "Sana all barterist.");
+                    hashMap.put("barter_score", "50");
+                    hashMap.put("followers", "0");
+                    hashMap.put("following", "0");
                     userReference.updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {
                         @Override
                         public void onComplete(@NonNull Task task) {
