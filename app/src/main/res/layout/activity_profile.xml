@@ -1,57 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#FFFFFF"
     tools:context=".ui.ProfileActivity">
 
-    <LinearLayout
+    <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@drawable/background_header"
-        android:elevation="8dp">
-
-        <ImageButton
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="5dp"
-            android:background="@drawable/ic_button_back"
-            android:backgroundTint="@color/iconTint" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:fontFamily="@font/montserrat_bold"
-            android:text="Profile"
-            android:textColor="@color/textColor"
-            android:textSize="24sp" />
-
-    </LinearLayout>
+        android:elevation="8dp"
+        app:layout_scrollFlags="scroll|enterAlways"
+        app:navigationIcon="@drawable/ic_button_back"
+        app:title="Your BarterTayo Profile" />
 
     <LinearLayout
-        android:orientation="vertical"
         android:id="@+id/body"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/header">
+        android:layout_below="@+id/header"
+        android:orientation="vertical">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/userProfilePhoto"
             android:layout_width="150dp"
             android:layout_height="150dp"
-            android:elevation="8dp"
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/placeholder_userpicture" />
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/placeholder_userpicture"
+            android:elevation="8dp" />
 
         <TextView
             android:id="@+id/userProfileName"
@@ -79,17 +60,17 @@
             android:id="@+id/userProfileBarterScore"
             style="@style/Widget.MaterialComponents.Chip.Entry"
             android:layout_width="wrap_content"
-            app:chipBackgroundColor="@color/colorPrimary"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
-            app:chipIcon="@drawable/ic_tab_deal"
-            app:iconStartPadding="5dp"
-            app:checkedIconEnabled="false"
             android:checkable="false"
-            app:iconEndPadding="5dp"
+            android:text="barter_score"
+            app:checkedIconEnabled="false"
+            app:chipBackgroundColor="@color/colorPrimary"
+            app:chipIcon="@drawable/ic_icon_deal_24"
             app:chipIconTint="@color/iconTint"
             app:closeIconEnabled="false"
-            android:layout_height="wrap_content"
-            android:text="barter_score"/>
+            app:iconEndPadding="5dp"
+            app:iconStartPadding="10dp" />
 
         <LinearLayout
             android:id="@+id/userProfileFollow"
@@ -135,8 +116,8 @@
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:ellipsize="end"
-            android:maxLength="160"
             android:fontFamily="@font/montserrat"
+            android:maxLength="160"
             android:maxLines="3"
             android:text="Sana all barterist."
             android:textAlignment="center"
@@ -146,37 +127,33 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="4dp"
-            android:background="@color/colorPrimary"/>
+            android:background="@color/colorPrimary" />
 
         <com.google.android.material.tabs.TabLayout
-            style="Widget.MaterialComponents.TabLayout"
             android:id="@+id/profileTabs"
-            android:elevation="8dp"
+            style="Widget.MaterialComponents.TabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:icon="@drawable/ic_tab_deal"
+                android:icon="@drawable/ic_icon_deal_24"
                 android:text="Posts"
-                android:textAlignment="center"
-                />
+                android:textAlignment="center" />
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
-                android:icon="@drawable/ic_tab_deal"
                 android:layout_height="wrap_content"
-                android:text="Deals"
-                />
+                android:icon="@drawable/ic_icon_deal_24"
+                android:text="Deals" />
 
         </com.google.android.material.tabs.TabLayout>
 
         <androidx.viewpager.widget.ViewPager
             android:layout_width="match_parent"
-            android:background="@drawable/background_body"
             android:layout_height="match_parent"
-            android:layout_below="@+id/profileTabs" />
+            android:background="@drawable/background_body" />
 
     </LinearLayout>
 

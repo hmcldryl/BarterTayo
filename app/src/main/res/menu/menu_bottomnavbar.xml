@@ -3,14 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:icon="@drawable/ic_home"
+        android:id="@+id/navigation_home"
+        android:icon="@drawable/ic_icon_home_24"
         android:title="Home"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/navigation_messages"
-        android:icon="@drawable/ic_messages"
-        app:showAsAction="ifRoom"
-        android:title="Messages" />
+        android:icon="@drawable/ic_icon_messages_24"
+        android:title="Messages"
+        app:showAsAction="ifRoom" />
 
 </menu>

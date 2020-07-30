@@ -19,8 +19,7 @@
             android:layout_width="300dp"
             android:layout_height="100dp"
             android:layout_gravity="center"
-            android:layout_marginBottom="20dp"
-            android:src="@drawable/logo" />
+            android:src="@drawable/splash_logo" />
 
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"

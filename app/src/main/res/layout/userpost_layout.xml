@@ -111,6 +111,9 @@
                             android:id="@+id/postImages1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginEnd="5dp"
+                            android:clickable="true"
+                            android:focusable="true"
                             android:scaleType="centerCrop"
                             android:src="@drawable/placeholder_add_barterpost"
                             android:visibility="visible" />
@@ -119,6 +122,9 @@
                             android:id="@+id/postImages2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginEnd="5dp"
+                            android:clickable="true"
+                            android:focusable="true"
                             android:scaleType="centerCrop"
                             android:src="@drawable/placeholder_add_barterpost"
                             android:visibility="visible" />
@@ -127,6 +133,9 @@
                             android:id="@+id/postImages3"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginEnd="5dp"
+                            android:clickable="true"
+                            android:focusable="true"
                             android:scaleType="centerCrop"
                             android:src="@drawable/placeholder_add_barterpost"
                             android:visibility="visible" />
@@ -135,26 +144,41 @@
                             android:id="@+id/postImages4"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginEnd="5dp"
+                            android:clickable="true"
+                            android:focusable="true"
                             android:scaleType="centerCrop"
                             android:src="@drawable/placeholder_add_barterpost"
                             android:visibility="visible" />
+
+                        <ImageView
+                            android:id="@+id/postImages5"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/placeholder_add_barterpost"
+                            android:visibility="visible" />
+
                     </LinearLayout>
                 </HorizontalScrollView>
 
                 <com.google.android.material.chip.ChipGroup
                     android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
                     android:layout_marginTop="10dp"
-                    android:layout_height="wrap_content">
+                    app:singleLine="true"
+                    android:layout_marginEnd="10dp">
 
                     <com.google.android.material.chip.Chip
                         style="@style/Widget.MaterialComponents.Chip.Action"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/montserrat"
-                        app:chipBackgroundColor="@color/colorPrimary"
-                        android:text="barter_post_tag" />
+                        android:text="barter_post_tag"
+                        app:chipBackgroundColor="@color/colorPrimary" />
 
                 </com.google.android.material.chip.ChipGroup>
 
@@ -188,7 +212,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginStart="10dp"
                     android:layout_toEndOf="@+id/postLikeBtn"
-                    android:text="# people like this item."
+                    android:text="item_likes"
                     android:textColor="@color/textColor"
                     android:textSize="12sp" />
 

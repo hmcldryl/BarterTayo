@@ -7,33 +7,16 @@
     android:background="@drawable/background_body"
     tools:context=".ui.PostActivity">
 
-    <LinearLayout
+    <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/header"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:background="@drawable/background_header">
-
-        <ImageButton
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="5dp"
-            android:background="@drawable/ic_button_back"
-            android:backgroundTint="@color/iconTint" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:fontFamily="@font/montserrat_bold"
-            android:text="New Barter"
-            android:textColor="@color/textColor"
-            android:textSize="24sp" />
-
-    </LinearLayout>
+        android:layout_height="?attr/actionBarSize"
+        android:background="@drawable/background_header"
+        android:elevation="8dp"
+        app:layout_scrollFlags="scroll|enterAlways"
+        app:menu="@menu/menu_topappbar_post"
+        app:navigationIcon="@drawable/ic_button_back"
+        app:title="Create Post" />
 
     <LinearLayout
         android:id="@+id/body"
@@ -52,8 +35,8 @@
             android:layout_marginEnd="10dp"
             android:hint="Enter post caption..."
             app:boxStrokeColor="@color/iconTint"
-            app:counterMaxLength="160"
             app:counterEnabled="true"
+            app:counterMaxLength="160"
             app:counterTextColor="@color/textColorHint"
             app:hintTextColor="@color/textColorHint">
 
@@ -84,64 +67,75 @@
                     android:id="@+id/postImages1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:visibility="visible"
+                    android:layout_marginEnd="5dp"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/placeholder_add_barterpost" />
+                    android:src="@drawable/placeholder_add_barterpost"
+                    android:visibility="visible" />
 
                 <ImageView
                     android:id="@+id/postImages2"
                     android:layout_width="wrap_content"
-                    android:visibility="visible"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/placeholder_add_barterpost" />
+                    android:src="@drawable/placeholder_add_barterpost"
+                    android:visibility="visible" />
 
                 <ImageView
                     android:id="@+id/postImages3"
                     android:layout_width="wrap_content"
-                    android:visibility="visible"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/placeholder_add_barterpost" />
+                    android:src="@drawable/placeholder_add_barterpost"
+                    android:visibility="visible" />
 
                 <ImageView
                     android:id="@+id/postImages4"
                     android:layout_width="wrap_content"
-                    android:visibility="visible"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/placeholder_add_barterpost" />
+                    android:src="@drawable/placeholder_add_barterpost"
+                    android:visibility="visible" />
+
+                <ImageView
+                    android:id="@+id/postImages5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/placeholder_add_barterpost"
+                    android:visibility="visible" />
             </LinearLayout>
         </HorizontalScrollView>
 
         <com.google.android.material.chip.ChipGroup
             android:layout_width="match_parent"
-            android:layout_marginEnd="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_height="wrap_content">
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp">
 
             <com.google.android.material.chip.Chip
                 style="@style/Widget.MaterialComponents.Chip.Action"
                 android:layout_width="wrap_content"
-                android:fontFamily="@font/montserrat"
-                app:chipBackgroundColor="@color/colorPrimary"
                 android:layout_height="wrap_content"
-                android:text="barter_post_tag"/>
+                android:fontFamily="@font/montserrat"
+                android:text="barter_post_tag"
+                app:chipBackgroundColor="@color/colorPrimary" />
 
         </com.google.android.material.chip.ChipGroup>
 
     </LinearLayout>
-
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/fab_addBarter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        app:backgroundTint="@color/colorPrimary"
-        android:text="Add Barter"
-        app:icon="@drawable/ic_addbarter_icon"/>
 
 </RelativeLayout>
