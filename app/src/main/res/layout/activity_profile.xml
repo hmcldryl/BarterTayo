@@ -66,8 +66,7 @@
             android:text="barter_score"
             app:checkedIconEnabled="false"
             app:chipBackgroundColor="@color/colorPrimary"
-            app:chipIcon="@drawable/ic_icon_deal_24"
-            app:chipIconTint="@color/iconTint"
+            app:chipIcon="@drawable/ic_icon_barterscore_24"
             app:closeIconEnabled="false"
             app:iconEndPadding="5dp"
             app:iconStartPadding="10dp" />
@@ -119,14 +118,14 @@
             android:fontFamily="@font/montserrat"
             android:maxLength="160"
             android:maxLines="3"
-            android:text="Sana all barterist."
+            android:text="bio"
             android:textAlignment="center"
             android:textColor="@color/textColor"
             android:textSize="18sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="4dp"
+            android:layout_height="6dp"
             android:background="@color/colorPrimary" />
 
         <com.google.android.material.tabs.TabLayout
@@ -138,14 +137,12 @@
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:icon="@drawable/ic_icon_deal_24"
                 android:text="Posts"
                 android:textAlignment="center" />
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:icon="@drawable/ic_icon_deal_24"
                 android:text="Deals" />
 
         </com.google.android.material.tabs.TabLayout>

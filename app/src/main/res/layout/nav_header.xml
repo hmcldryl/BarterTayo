@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -13,7 +13,7 @@
         android:id="@+id/userProfilePhotoDrawer"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
         android:layout_marginTop="40dp"
         android:layout_marginBottom="20dp"
         android:background="@drawable/placeholder_userpicture" />
@@ -21,27 +21,29 @@
     <TextView
         android:id="@+id/userDisplayNameDrawer"
         android:layout_width="250dp"
-        android:layout_centerHorizontal="true"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/userProfilePhotoDrawer"
-        android:maxLines="1"
+        android:layout_gravity="center"
         android:ellipsize="end"
         android:fontFamily="@font/montserrat_bold"
+        android:maxLines="1"
         android:text="display_name"
-        android:textAlignment="center"
-        android:textColor="@color/textColor"
-        android:textSize="20sp" />
-
-    <TextView
-        android:id="@+id/userBarterScoreDrawer"
-        android:layout_width="200dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="10dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/userDisplayNameDrawer"
-        android:text="barter_score"
         android:textAlignment="center"
         android:textColor="@color/textColor"
         android:textSize="18sp" />
 
-</RelativeLayout>
+    <com.google.android.material.chip.Chip
+        android:id="@+id/userBarterScoreDrawer"
+        style="@style/Widget.MaterialComponents.Chip.Entry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:checkable="false"
+        android:text="barter_score"
+        app:checkedIconEnabled="false"
+        app:chipBackgroundColor="@color/colorPrimary"
+        app:chipIcon="@drawable/ic_icon_barterscore_24"
+        app:closeIconEnabled="false"
+        app:iconEndPadding="5dp"
+        app:iconStartPadding="10dp" />
+
+</LinearLayout>

@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.chip.Chip;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -18,6 +19,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.opustech.bartertayo.R;
 import com.squareup.picasso.Picasso;
 
@@ -38,9 +41,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private BottomNavigationView bottomAppBar;
     private NavigationView navigationView;
     private FirebaseAuth firebaseAuth;
-    private DatabaseReference userRef;
+    private FirebaseFirestore firebaseFirestore;
     private CircleImageView userProfileImage;
-    private TextView userProfileDisplayName, userProfileBarterScore;
+    private TextView userProfileDisplayName;
+    private Chip userProfileBarterScore;
     private String currentUserID;
 
     @Override
@@ -49,8 +53,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
 
         firebaseAuth = FirebaseAuth.getInstance();
+        firebaseFirestore = FirebaseFirestore.getInstance();
         currentUserID = firebaseAuth.getCurrentUser().getUid();
-        userRef = FirebaseDatabase.getInstance().getReference().child("Users");
 
         drawerLayout = findViewById(R.id.main_container);
         topAppBar = findViewById(R.id.main_topAppBar);
@@ -63,6 +67,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         userProfileDisplayName = navView.findViewById(R.id.userDisplayNameDrawer);
         userProfileBarterScore = navView.findViewById(R.id.userBarterScoreDrawer);
 
+        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
+                .setPersistenceEnabled(true)
+                .build();
+        firebaseFirestore.setFirestoreSettings(settings);
+
         userRef.child(currentUserID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -73,7 +82,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     }
                     if (snapshot.hasChild("profile_image")) {
                         String image = snapshot.child("profile_image").getValue().toString();
-                        Picasso.get().load(image).placeholder(R.drawable.placeholder_userpicture).into(userProfileImage);
+                        Picasso.get().load(image).into(userProfileImage);
+                    }
+                    if (snapshot.hasChild("barter_score")) {
+                        String barter_score = snapshot.child("barter_score").getValue().toString();
+                        userProfileBarterScore.setText(barter_score);
                     }
                 }
             }
@@ -131,10 +144,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
             finish();
-        } else {
-            updateUI();
         }
     }
 
@@ -156,7 +167,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } if (id == R.id.btn_profile) {
             Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
             startActivity(intent);
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
             drawerLayout.closeDrawers();
         } if (id == R.id.btn_help) {
             fragment = new HomeFragment();
@@ -170,10 +181,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
-
-    }
-
-    private void updateUI() {
 
     }
 

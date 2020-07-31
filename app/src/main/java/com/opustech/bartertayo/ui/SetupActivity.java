@@ -9,6 +9,7 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -16,6 +17,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -25,6 +27,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -46,6 +53,7 @@ public class SetupActivity extends AppCompatActivity {
     private EditText user_fname, user_lname, user_dname, user_bdate;
     private CardView continueBtn;
     private FirebaseAuth firebaseAuth;
+    private FirebaseFirestore firebaseFirestore;
     private DatabaseReference userReference;
     private StorageReference userProfileImageRef;
     private CircleImageView user_dpic;
@@ -60,7 +68,8 @@ public class SetupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_setup);
 
         firebaseAuth = FirebaseAuth.getInstance();
-        currentUserID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
+        firebaseFirestore = FirebaseFirestore.getInstance();
+        currentUserID = firebaseAuth.getCurrentUser().getUid();
         userReference = FirebaseDatabase.getInstance().getReference().child("Users").child(currentUserID);
         userProfileImageRef = FirebaseStorage.getInstance().getReference().child("profile_image");
 
@@ -83,18 +92,25 @@ public class SetupActivity extends AppCompatActivity {
             }
         });
 
-        userReference.addValueEventListener(new ValueEventListener() {
+        final DocumentReference documentReference = firebaseFirestore
+                .collection("User")
+                .document(currentUserID);
+        documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    String image = snapshot.child("profile_image").getValue().toString();
-                    Picasso.get().load(image).placeholder(R.drawable.placeholder_userpicture).into(user_dpic);
+            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                if (error != null) {
+                    Toast.makeText(SetupActivity.this, "listen failed", Toast.LENGTH_SHORT).show();
+                    return;
                 }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
+                if (value != null && value.exists()) {
+                    Toast.makeText(SetupActivity.this, "Current data: ", Toast.LENGTH_SHORT).show();
+                    String image = value.get("profile_image").toString();
+                    Picasso.get()
+                            .load(image)
+                            .into(user_dpic);
+                } else {
+                    Toast.makeText(SetupActivity.this, "das", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -112,8 +128,10 @@ public class SetupActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 new DatePickerDialog(SetupActivity.this, date, calendar
-                        .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
-                        calendar.get(Calendar.DAY_OF_MONTH)).show();
+                        .get(Calendar.YEAR),
+                        calendar.get(Calendar.MONTH),
+                        calendar.get(Calendar.DAY_OF_MONTH))
+                        .show();
             }
         });
 
@@ -145,20 +163,25 @@ public class SetupActivity extends AppCompatActivity {
                     hashMap.put("barter_score", "50");
                     hashMap.put("followers", "0");
                     hashMap.put("following", "0");
-                    userReference.updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {
-                        @Override
-                        public void onComplete(@NonNull Task task) {
-                            if (task.isSuccessful()) {
-                                Toast.makeText(SetupActivity.this, "You have successfully created your BarterTayo account.", Toast.LENGTH_SHORT).show();
-                                FirebaseUser user = firebaseAuth.getCurrentUser();
-                                if (user != null) {
-                                    startMainActivity();
+
+                    firebaseFirestore.collection("User/" + currentUserID)
+                            .add(hashMap)
+                            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                @Override
+                                public void onSuccess(DocumentReference documentReference) {
+                                    Toast.makeText(SetupActivity.this, "You have successfully created your BarterTayo account.", Toast.LENGTH_SHORT).show();
+                                    FirebaseUser user = firebaseAuth.getCurrentUser();
+                                    if (user != null) {
+                                        startMainActivity();
+                                    }
                                 }
-                            } else {
-                                Toast.makeText(SetupActivity.this, "Error: " + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(SetupActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            });
                 }
             }
         });
@@ -189,24 +212,25 @@ public class SetupActivity extends AppCompatActivity {
                             result.addOnSuccessListener(new OnSuccessListener<Uri>() {
                                 @Override
                                 public void onSuccess(Uri uri) {
-                                    Toast.makeText(SetupActivity.this, "Profile image upload success.", Toast.LENGTH_SHORT).show();
                                     final String downloadUrl = uri.toString();
-                                    userReference.child("profile_image")
-                                            .setValue(downloadUrl)
-                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    firebaseFirestore.collection("Users/" + currentUserID).document("profile_image")
+                                            .set(downloadUrl)
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                 @Override
-                                                public void onComplete(@NonNull Task<Void> task) {
-                                                    if (task.isSuccessful()) {
-                                                        Toast.makeText(SetupActivity.this, "Profile image upload success.", Toast.LENGTH_SHORT).show();
-                                                    } else {
-                                                        Toast.makeText(SetupActivity.this, "Error: " + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
-                                                    }
+                                                public void onSuccess(Void aVoid) {
+                                                    Toast.makeText(SetupActivity.this, "Profile image upload success.", Toast.LENGTH_SHORT).show();
+                                                }
+                                            })
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Toast.makeText(SetupActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                                                 }
                                             });
                                 }
                             });
                         } else {
-                            Toast.makeText(SetupActivity.this, "Error: " + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SetupActivity.this, "Error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
                 });

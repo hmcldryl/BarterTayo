@@ -47,14 +47,13 @@ public class ProfileActivity extends AppCompatActivity {
 
         tabLayout = findViewById(R.id.profileTabs);
 
-
         userRef.child(currentUserID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     if (snapshot.hasChild("profile_image")) {
                         String image = snapshot.child("profile_image").getValue().toString();
-                        Picasso.get().load(image).placeholder(R.drawable.placeholder_userpicture).into(profileImage);
+                        Picasso.get().load(image).into(profileImage);
                     }
                     if (snapshot.hasChild("display_name")) {
                         String display_name = snapshot.child("display_name").getValue().toString();
