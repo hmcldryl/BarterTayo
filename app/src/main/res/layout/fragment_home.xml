@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/background_body"
     android:orientation="vertical"
-    android:paddingBottom="?attr/actionBarSize"
+    android:layout_marginBottom="?attr/actionBarSize"
     tools:context=".ui.HomeFragment">
 
     <com.google.android.material.tabs.TabLayout

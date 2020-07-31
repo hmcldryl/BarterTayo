@@ -84,6 +84,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
+        bottomAppBar.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+                Fragment fragment;
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                if (id == R.id.navigation_home) {
+                    fragment = new HomeFragment();
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.main_hostFragment, fragment)
+                            .commit();
+                } if (id == R.id.navigation_messages) {
+                    fragment = new MessagesFragment();
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.main_hostFragment, fragment)
+                            .commit();
+                } if (id == R.id.navigation_notifications) {
+                    fragment = new NotificationsFragment();
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.main_hostFragment, fragment)
+                            .commit();
+                }
+                return true;
+            }
+        });
+
         ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(
                 this,
                 drawerLayout,
@@ -160,7 +186,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
             finish();
         }
     }
