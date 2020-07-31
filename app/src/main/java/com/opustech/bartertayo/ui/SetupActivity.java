@@ -197,8 +197,6 @@ public class SetupActivity extends AppCompatActivity {
                                                 @Override
                                                 public void onComplete(@NonNull Task<Void> task) {
                                                     if (task.isSuccessful()) {
-                                                        Intent intent = new Intent(SetupActivity.this, SetupActivity.class);
-                                                        startActivity(intent);
                                                         Toast.makeText(SetupActivity.this, "Profile image upload success.", Toast.LENGTH_SHORT).show();
                                                     } else {
                                                         Toast.makeText(SetupActivity.this, "Error: " + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();

@@ -5,7 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background_body"
-    tools:context=".ui.NotificationsFragment">
+    android:orientation="vertical"
+    android:paddingBottom="?attr/actionBarSize"
+    tools:context=".ui.NewsFragment">
 
     <TextView
         android:layout_width="wrap_content"
@@ -13,6 +15,6 @@
         android:layout_gravity="center"
         android:textSize="30sp"
         android:fontFamily="@font/montserrat_bold"
-        android:text="NOTIFICATIONS"/>
+        android:text="NEWS"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

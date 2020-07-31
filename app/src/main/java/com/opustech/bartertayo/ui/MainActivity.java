@@ -8,6 +8,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.bottomappbar.BottomAppBar;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -33,9 +34,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private Toolbar topAppBar;
-    private FloatingActionButton btnNewPost;
     private DrawerLayout drawerLayout;
-    private BottomAppBar bottomAppBar;
+    private BottomNavigationView bottomAppBar;
     private NavigationView navigationView;
     private FirebaseAuth firebaseAuth;
     private DatabaseReference userRef;
@@ -54,7 +54,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         drawerLayout = findViewById(R.id.main_container);
         topAppBar = findViewById(R.id.main_topAppBar);
-        btnNewPost = findViewById(R.id.fab_addBarter);
         bottomAppBar = findViewById(R.id.main_bottomAppBar);
         setSupportActionBar(topAppBar);
         navigationView = findViewById(R.id.main_navigationdrawer);
@@ -63,18 +62,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         userProfileImage = navView.findViewById(R.id.userProfilePhotoDrawer);
         userProfileDisplayName = navView.findViewById(R.id.userDisplayNameDrawer);
         userProfileBarterScore = navView.findViewById(R.id.userBarterScoreDrawer);
-
-        btnNewPost.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FirebaseUser currentUser = firebaseAuth.getCurrentUser();
-                if (currentUser != null) {
-                    Intent intent = new Intent(MainActivity.this, PostActivity.class);
-                    startActivity(intent);
-                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                }
-            }
-        });
 
         userRef.child(currentUserID).addValueEventListener(new ValueEventListener() {
             @Override
@@ -144,18 +131,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
             startActivity(intent);
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-            drawerLayout.closeDrawers();
-        } if (id == R.id.btn_messages) {
-            fragment = new HomeFragment();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.main_hostFragment, fragment)
-                    .commit();
-            drawerLayout.closeDrawers();
-        } if (id == R.id.btn_notifications) {
-            fragment = new NotificationsFragment();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.main_hostFragment, fragment)
-                    .commit();
             drawerLayout.closeDrawers();
         } if (id == R.id.btn_help) {
             fragment = new HomeFragment();

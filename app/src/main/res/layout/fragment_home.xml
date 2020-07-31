@@ -6,10 +6,11 @@
     android:layout_height="match_parent"
     android:background="@drawable/background_body"
     android:orientation="vertical"
+    android:paddingBottom="?attr/actionBarSize"
     tools:context=".ui.HomeFragment">
 
     <com.google.android.material.tabs.TabLayout
-        android:id="@+id/homeTabs"
+        android:id="@+id/homeTab"
         style="Widget.MaterialComponents.TabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -28,6 +29,7 @@
     </com.google.android.material.tabs.TabLayout>
 
     <androidx.viewpager.widget.ViewPager
+        android:id="@+id/homeViewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/background_body" />

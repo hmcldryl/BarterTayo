@@ -12,6 +12,12 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
+        android:id="@+id/navigation_messages"
+        android:name="com.opustech.bartertayo.ui.NotificationsFragment"
+        android:label="Messages"
+        tools:layout="@layout/fragment_messages" />
+
+    <fragment
         android:id="@+id/navigation_notifications"
         android:name="com.opustech.bartertayo.ui.NotificationsFragment"
         android:label="Notifications"

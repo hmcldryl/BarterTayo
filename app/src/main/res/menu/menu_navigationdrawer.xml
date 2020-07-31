@@ -14,24 +14,17 @@
         app:showAsAction="ifRoom"
         android:title="Profile" />
 
-
-    <item
-        android:id="@+id/btn_messages"
-        android:icon="@drawable/ic_icon_messages_24"
-        app:showAsAction="ifRoom"
-        android:title="Messages" />
-
-    <item
-        android:id="@+id/btn_notifications"
-        android:icon="@drawable/ic_icon_notifications_24"
-        app:showAsAction="ifRoom"
-        android:title="Notifications" />
-
     <item
         android:id="@+id/btn_help"
-        android:icon="@drawable/ic_icon_about_24"
+        android:icon="@drawable/ic_icon_help_24"
         app:showAsAction="ifRoom"
         android:title="Help" />
+
+    <item
+        android:id="@+id/btn_about"
+        android:icon="@drawable/ic_icon_about_24"
+        app:showAsAction="ifRoom"
+        android:title="About" />
 
     <item
         android:id="@+id/btn_logout"
