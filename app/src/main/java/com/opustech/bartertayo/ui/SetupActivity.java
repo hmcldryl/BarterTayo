@@ -32,6 +32,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -54,7 +55,8 @@ public class SetupActivity extends AppCompatActivity {
     private CardView continueBtn;
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firebaseFirestore;
-    private DatabaseReference userReference;
+    private DocumentReference documentReference;
+    private ListenerRegistration documentListener;
     private StorageReference userProfileImageRef;
     private CircleImageView user_dpic;
     ProgressBar progressBar;
@@ -69,8 +71,10 @@ public class SetupActivity extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
+        documentReference = firebaseFirestore
+                .collection("Users")
+                .document(currentUserID);
         currentUserID = firebaseAuth.getCurrentUser().getUid();
-        userReference = FirebaseDatabase.getInstance().getReference().child("Users").child(currentUserID);
         userProfileImageRef = FirebaseStorage.getInstance().getReference().child("profile_image");
 
         user_dname = findViewById(R.id.regDisplayName);
@@ -89,28 +93,6 @@ public class SetupActivity extends AppCompatActivity {
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 intent.setType("image/*");
                 startActivityForResult(intent, Gallery_Pick);
-            }
-        });
-
-        final DocumentReference documentReference = firebaseFirestore
-                .collection("User")
-                .document(currentUserID);
-        documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                if (error != null) {
-                    Toast.makeText(SetupActivity.this, "listen failed", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if (value != null && value.exists()) {
-                    Toast.makeText(SetupActivity.this, "Current data: ", Toast.LENGTH_SHORT).show();
-                    String image = value.get("profile_image").toString();
-                    Picasso.get()
-                            .load(image)
-                            .into(user_dpic);
-                } else {
-                    Toast.makeText(SetupActivity.this, "das", Toast.LENGTH_SHORT).show();
-                }
             }
         });
 
@@ -188,6 +170,37 @@ public class SetupActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+        if (currentUser == null) {
+            Intent intent = new Intent(SetupActivity.this, LoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+            finish();
+        } else {
+            documentListener = documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                @Override
+                public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                    if (value != null && value.exists()) {
+                        String image = value.get("profile_image").toString();
+                        Picasso.get()
+                                .load(image)
+                                .into(user_dpic);
+                    }
+                }
+            });
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        documentListener.remove();
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -249,7 +262,7 @@ public class SetupActivity extends AppCompatActivity {
         Intent intent = new Intent(SetupActivity.this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
         finish();
     }
 
