@@ -26,7 +26,7 @@
         android:ellipsize="end"
         android:fontFamily="@font/montserrat_bold"
         android:maxLines="1"
-        android:text="display_name"
+        android:text=""
         android:textAlignment="center"
         android:textColor="@color/textColor"
         android:textSize="18sp" />
@@ -38,10 +38,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:checkable="false"
-        android:text="barter_score"
+        android:text=""
         app:checkedIconEnabled="false"
         app:chipBackgroundColor="@color/colorPrimary"
-        app:chipIcon="@drawable/ic_icon_barterscore_24"
         app:closeIconEnabled="false"
         app:iconEndPadding="5dp"
         app:iconStartPadding="10dp" />

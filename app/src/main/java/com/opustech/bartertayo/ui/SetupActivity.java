@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -52,12 +53,14 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class SetupActivity extends AppCompatActivity {
 
     private EditText user_fname, user_lname, user_dname, user_bdate;
+    private TextView buttonText;
     private CardView continueBtn;
-    private FirebaseAuth firebaseAuth;
-    private FirebaseFirestore firebaseFirestore;
-    private DocumentReference documentReference;
-    private ListenerRegistration documentListener;
-    private StorageReference userProfileImageRef;
+    private FirebaseAuth userAuth;
+    private FirebaseFirestore db;
+    private DocumentReference userRef;
+    private DocumentReference profileImageRef;
+    private StorageReference profileImageFilePathRef;
+    private StorageReference profileImageFileNameRef;
     private CircleImageView user_dpic;
     ProgressBar progressBar;
     String currentUserID;
@@ -69,19 +72,21 @@ public class SetupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setup);
 
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseFirestore = FirebaseFirestore.getInstance();
-        documentReference = firebaseFirestore
-                .collection("Users")
-                .document(currentUserID);
-        currentUserID = firebaseAuth.getCurrentUser().getUid();
-        userProfileImageRef = FirebaseStorage.getInstance().getReference().child("profile_image");
+        userAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
+        userRef = db.document("Users/"+ currentUserID)
+        ;
+        profileImageFilePathRef = profileImageFileNameRef.child(currentUserID + ".jpg");
+        profileImageFileNameRef = FirebaseStorage.getInstance().getReference().child("profile_image");
+        profileImageRef = db.collection("Users").document(currentUserID + "/profile_image");
+        currentUserID = userAuth.getCurrentUser().getUid();
 
         user_dname = findViewById(R.id.regDisplayName);
         user_fname = findViewById(R.id.regFirstName);
         user_lname = findViewById(R.id.regLastName);
         user_bdate = findViewById(R.id.regBirthdate);
 
+        buttonText = findViewById(R.id.buttonText);
         progressBar = findViewById(R.id.progressBar);
 
         user_dpic = findViewById(R.id.regUserProfilePhoto);
@@ -122,18 +127,29 @@ public class SetupActivity extends AppCompatActivity {
         continueBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                buttonText.setVisibility(View.GONE);
+                progressBar.setVisibility(View.VISIBLE);
+
                 String dname = user_dname.getText().toString();
                 String fname = user_fname.getText().toString();
                 String lname = user_lname.getText().toString();
                 String bdate = user_bdate.getText().toString();
 
                 if (dname.isEmpty()) {
+                    progressBar.setVisibility(View.GONE);
+                    buttonText.setVisibility(View.VISIBLE);
                     user_dname.setError("Please provide a display name.");
                 } else if (fname.isEmpty()) {
+                    progressBar.setVisibility(View.GONE);
+                    buttonText.setVisibility(View.VISIBLE);
                     user_fname.setError("Please enter a first name.");
                 } else if (lname.isEmpty()) {
+                    progressBar.setVisibility(View.GONE);
+                    buttonText.setVisibility(View.VISIBLE);
                     user_lname.setError("Please enter a last name.");
                 } else if (bdate.isEmpty()) {
+                    progressBar.setVisibility(View.GONE);
+                    buttonText.setVisibility(View.VISIBLE);
                     user_lname.setError("Please enter a valid date.");
                 } else {
                     HashMap<String, Object> hashMap = new HashMap<>();
@@ -141,18 +157,21 @@ public class SetupActivity extends AppCompatActivity {
                     hashMap.put("first_name", fname);
                     hashMap.put("last_name", lname);
                     hashMap.put("birth_date", bdate);
-                    hashMap.put("bio", "Sana all barterist.");
-                    hashMap.put("barter_score", "50");
-                    hashMap.put("followers", "0");
+                    hashMap.put("barter_score", "0");
                     hashMap.put("following", "0");
+                    hashMap.put("followers", "0");
+                    hashMap.put("bio", "Sana all barterist.");
 
-                    firebaseFirestore.collection("User/" + currentUserID)
-                            .add(hashMap)
-                            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    db.collection("Users")
+                            .document(currentUserID)
+                            .set(hashMap)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
-                                public void onSuccess(DocumentReference documentReference) {
+                                public void onSuccess(Void aVoid) {
+                                    progressBar.setVisibility(View.GONE);
+                                    buttonText.setVisibility(View.VISIBLE);
                                     Toast.makeText(SetupActivity.this, "You have successfully created your BarterTayo account.", Toast.LENGTH_SHORT).show();
-                                    FirebaseUser user = firebaseAuth.getCurrentUser();
+                                    FirebaseUser user = userAuth.getCurrentUser();
                                     if (user != null) {
                                         startMainActivity();
                                     }
@@ -162,6 +181,8 @@ public class SetupActivity extends AppCompatActivity {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
                                     Toast.makeText(SetupActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    progressBar.setVisibility(View.GONE);
+                                    buttonText.setVisibility(View.VISIBLE);
                                 }
                             });
                 }
@@ -172,19 +193,18 @@ public class SetupActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+        FirebaseUser currentUser = userAuth.getCurrentUser();
         if (currentUser == null) {
             Intent intent = new Intent(SetupActivity.this, LoginActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
-            overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
             finish();
         } else {
-            documentListener = documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            userRef.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
                 @Override
                 public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
                     if (value != null && value.exists()) {
-                        String image = value.get("profile_image").toString();
+                        String image = value.getString("profile_image");
                         Picasso.get()
                                 .load(image)
                                 .into(user_dpic);
@@ -192,12 +212,6 @@ public class SetupActivity extends AppCompatActivity {
                 }
             });
         }
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        documentListener.remove();
     }
 
     @Override
@@ -216,8 +230,7 @@ public class SetupActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 assert result != null;
                 Uri resultUri = result.getUri();
-                StorageReference filePath = userProfileImageRef.child(currentUserID + ".jpg");
-                filePath.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                profileImageFilePathRef.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                         if (task.isSuccessful()) {
@@ -226,7 +239,7 @@ public class SetupActivity extends AppCompatActivity {
                                 @Override
                                 public void onSuccess(Uri uri) {
                                     final String downloadUrl = uri.toString();
-                                    firebaseFirestore.collection("Users/" + currentUserID).document("profile_image")
+                                    profileImageRef
                                             .set(downloadUrl)
                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                 @Override
@@ -262,7 +275,6 @@ public class SetupActivity extends AppCompatActivity {
         Intent intent = new Intent(SetupActivity.this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
-        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
         finish();
     }
 

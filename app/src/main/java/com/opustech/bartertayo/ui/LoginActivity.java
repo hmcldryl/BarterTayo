@@ -23,7 +23,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private EditText loginUser, loginPassword;
     private CardView loginBtn;
-    private TextView registerBtn;
+    private TextView registerBtn, buttonText;
     private ProgressBar progressBar;
     private FirebaseAuth firebaseAuth;
 
@@ -39,12 +39,13 @@ public class LoginActivity extends AppCompatActivity {
         loginBtn = findViewById(R.id.btnLogin);
         registerBtn = findViewById(R.id.registerBtn);
 
+        buttonText = findViewById(R.id.buttonText);
         progressBar = findViewById(R.id.progressBar);
 
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loginBtn.setVisibility(View.GONE);
+                buttonText.setVisibility(View.GONE);
                 progressBar.setVisibility(View.VISIBLE);
                 String user_email = loginUser.getText().toString().trim();
                 String user_password = loginPassword.getText().toString().trim();
@@ -52,14 +53,12 @@ public class LoginActivity extends AppCompatActivity {
                 if (user_email.isEmpty()) {
                     loginUser.setError("Please enter username.");
                     progressBar.setVisibility(View.GONE);
-                    loginBtn.setVisibility(View.VISIBLE);
-                }
-                else if (user_password.isEmpty()) {
+                    buttonText.setVisibility(View.VISIBLE);
+                } else if (user_password.isEmpty()) {
                     loginPassword.setError("Please enter password.");
                     progressBar.setVisibility(View.GONE);
-                    loginBtn.setVisibility(View.VISIBLE);
-                }
-                else {
+                    buttonText.setVisibility(View.VISIBLE);
+                } else {
                     loginUser(user_email, user_password);
                 }
             }
@@ -100,7 +99,7 @@ public class LoginActivity extends AppCompatActivity {
                             }
                         } else {
                             progressBar.setVisibility(View.GONE);
-                            loginBtn.setVisibility(View.VISIBLE);
+                            buttonText.setVisibility(View.VISIBLE);
                             Toast.makeText(LoginActivity.this, "Error: " + task.getException(), Toast.LENGTH_SHORT).show();
 
                         }

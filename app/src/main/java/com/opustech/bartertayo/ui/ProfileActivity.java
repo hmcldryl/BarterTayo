@@ -3,9 +3,12 @@ package com.opustech.bartertayo.ui;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -24,32 +27,56 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.opustech.bartertayo.R;
 import com.squareup.picasso.Picasso;
 
 public class ProfileActivity extends AppCompatActivity {
 
+    private Toolbar topAppBar;
     private TextView profileDisplayName, profileFullname, profileFollowing, profileFollowers, profileBio;
     private ImageView profileImage;
     private Chip profileBarterScore;
-    private TabLayout tabLayout;
-    private FirebaseAuth firebaseAuth;
-    private FirebaseFirestore firebaseFirestore;
-    private DocumentReference documentReference;
-    private ListenerRegistration documentListener;
+    private FirebaseAuth userAuth;
+    private FirebaseFirestore db;
+    private DocumentReference userRef;
     private String currentUserID;
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
+    private ProfileViewPagerAdapter profileViewPagerAdapter;
+
+    private String KEY_DISPLAY_NAME = "display_name";
+    private String KEY_FIRST_NAME = "first_name";
+    private String KEY_LAST_NAME = "last_name";
+    private String KEY_BIRTH_DATE = "birth_date";
+    private String KEY_BARTER_SCORE = "barter_score";
+    private String KEY_FOLLOWING = "following";
+    private String KEY_FOLLOWERS = "followers";
+    private String KEY_BIO = "bio";
+    private String KEY_PROFILE_IMAGE = "profile_image";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseFirestore = FirebaseFirestore.getInstance();
-        currentUserID = firebaseAuth.getCurrentUser().getUid();
-        documentReference = firebaseFirestore
-                .collection("User")
-                .document(currentUserID);
+        userAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
+        currentUserID = userAuth.getCurrentUser().getUid();
+        userRef = db.collection("Users").document(currentUserID);
+        currentUserID = userAuth.getCurrentUser().getUid();
+
+        topAppBar = findViewById(R.id.header);
+        setSupportActionBar(topAppBar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        topAppBar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
         profileImage = findViewById(R.id.userProfilePhoto);
         profileDisplayName = findViewById(R.id.userProfileName);
@@ -59,40 +86,44 @@ public class ProfileActivity extends AppCompatActivity {
         profileBarterScore = findViewById(R.id.userProfileBarterScore);
         profileBio = findViewById(R.id.userProfileBio);
 
-        tabLayout = findViewById(R.id.profileTabs);
+
+        viewPager = findViewById(R.id.profileViewPager);
+        tabLayout = findViewById(R.id.profileTab);
+        profileViewPagerAdapter = new ProfileViewPagerAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(profileViewPagerAdapter);
+        tabLayout.setupWithViewPager(viewPager);
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+        FirebaseUser currentUser = userAuth.getCurrentUser();
         if (currentUser == null) {
             Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
-            overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
             finish();
         } else {
-            documentListener = documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            userRef.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
                 @Override
                 public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
                     if (value != null && value.exists()) {
-                        String image = value.get("profile_image").toString();
-                        String display_name = value.get("display_name").toString();
-                        String first_name = value.get("first_name").toString();
-                        String last_name = value.get("last_name").toString();
+                        String image = value.getString(KEY_PROFILE_IMAGE);
+                        String display_name = value.getString(KEY_DISPLAY_NAME);
+                        String first_name = value.getString(KEY_FIRST_NAME);
+                        String last_name = value.getString(KEY_LAST_NAME);
                         String full_name = first_name + " " + last_name;
-                        int n = Integer.parseInt(value.get("followers").toString());
+                        int n = Integer.parseInt(value.getString(KEY_FOLLOWERS));
                         if (n <= 1) {
-                            String followers = value.get("followers").toString() + " follower";
+                            String followers = value.getString(KEY_FOLLOWERS) + " follower";
                             profileFollowers.setText(followers);
                         } else {
-                            String followers = value.get("followers").toString() + " followers";
+                            String followers = value.getString(KEY_FOLLOWERS) + " followers";
                             profileFollowers.setText(followers);
                         }
-                        String following = value.get("following").toString() + " following";
-                        String barter_score = value.get("barter_score").toString() + " BarterScore";
-                        String bio = value.get("bio").toString();
+                        String following = value.getString(KEY_FOLLOWING) + " following";
+                        String barter_score = value.getString(KEY_BARTER_SCORE) + " BarterScore";
+                        String bio = value.getString(KEY_BIO);
                         Picasso.get()
                                 .load(image)
                                 .into(profileImage);
@@ -105,11 +136,5 @@ public class ProfileActivity extends AppCompatActivity {
                 }
             });
         }
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        documentListener.remove();
     }
 }

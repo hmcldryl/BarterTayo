@@ -40,7 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:fontFamily="@font/montserrat_bold"
-            android:text="display_name"
+            android:text=""
             android:textAlignment="center"
             android:textColor="@color/textColor"
             android:textSize="20sp" />
@@ -51,7 +51,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:fontFamily="@font/montserrat"
-            android:text="full_name"
+            android:text=""
             android:textAlignment="center"
             android:textColor="#BF121212"
             android:textSize="16sp" />
@@ -63,10 +63,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:checkable="false"
-            android:text="barter_score"
+            android:text=""
             app:checkedIconEnabled="false"
             app:chipBackgroundColor="@color/colorPrimary"
-            app:chipIcon="@drawable/ic_icon_barterscore_24"
             app:closeIconEnabled="false"
             app:iconEndPadding="5dp"
             app:iconStartPadding="10dp" />
@@ -88,7 +87,7 @@
                 android:layout_marginStart="5dp"
                 android:layout_weight="1"
                 android:fontFamily="@font/montserrat"
-                android:text="follower_count"
+                android:text=""
                 android:textAlignment="center"
                 android:textColor="@color/textColor"
                 android:textSize="16sp" />
@@ -101,7 +100,7 @@
                 android:layout_marginEnd="5dp"
                 android:layout_weight="1"
                 android:fontFamily="@font/montserrat"
-                android:text="following_count"
+                android:text=""
                 android:textAlignment="center"
                 android:textColor="@color/textColor"
                 android:textSize="16sp" />
@@ -118,7 +117,7 @@
             android:fontFamily="@font/montserrat"
             android:maxLength="160"
             android:maxLines="3"
-            android:text="bio"
+            android:text=""
             android:textAlignment="center"
             android:textColor="@color/textColor"
             android:textSize="18sp" />
@@ -129,7 +128,7 @@
             android:background="@color/colorPrimary" />
 
         <com.google.android.material.tabs.TabLayout
-            android:id="@+id/profileTabs"
+            android:id="@+id/profileTab"
             style="Widget.MaterialComponents.TabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -148,6 +147,7 @@
         </com.google.android.material.tabs.TabLayout>
 
         <androidx.viewpager.widget.ViewPager
+            android:id="@+id/profileViewPager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/background_body" />

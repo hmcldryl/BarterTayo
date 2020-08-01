@@ -2,6 +2,7 @@ package com.opustech.bartertayo.ui;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -28,11 +29,10 @@ import java.util.Objects;
 
 public class PostActivity extends AppCompatActivity {
 
+    private Toolbar topAppBar;
     private EditText postCaption;
-    private FirebaseAuth firebaseAuth;
-    private DatabaseReference userReference, postReference;
+    private FirebaseAuth userAuth;
     private StorageReference postImage;
-    private ExtendedFloatingActionButton btnAddBarter;
     private String currentUserID, currentDate, currentTime, fileName;
     private Uri imageUri;
 
@@ -41,20 +41,20 @@ public class PostActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
 
-        btnAddBarter = findViewById(R.id.fab_addBarter);
-
-        firebaseAuth = FirebaseAuth.getInstance();
-        currentUserID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-        userReference = FirebaseDatabase.getInstance().getReference().child("Users").child(currentUserID);
-        postReference = FirebaseDatabase.getInstance().getReference().child("Posts");
-        postImage = FirebaseStorage.getInstance().getReference();
-
-        btnAddBarter.setOnClickListener(new View.OnClickListener() {
+        topAppBar = findViewById(R.id.header);
+        setSupportActionBar(topAppBar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        topAppBar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                onBackPressed();
             }
         });
+
+        userAuth = FirebaseAuth.getInstance();
+        currentUserID = userAuth.getCurrentUser().getUid();
+        postImage = FirebaseStorage.getInstance().getReference();
 
     }
 

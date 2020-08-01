@@ -46,10 +46,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout drawerLayout;
     private BottomNavigationView bottomAppBar;
     private NavigationView navigationView;
-    private FirebaseAuth firebaseAuth;
-    private FirebaseFirestore firebaseFirestore;
-    private DocumentReference documentReference;
-    private ListenerRegistration documentListener;
+    private FirebaseAuth userAuth;
+    private FirebaseFirestore db;
+    private DocumentReference userRef;
     private CircleImageView userProfileImage;
     private TextView userProfileDisplayName;
     private Chip userProfileBarterScore;
@@ -61,16 +60,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseFirestore = FirebaseFirestore.getInstance();
-        currentUserID = firebaseAuth.getCurrentUser().getUid();
-        documentReference = firebaseFirestore
-                .collection("User")
-                .document(currentUserID);
+        userAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
+        currentUserID = userAuth.getCurrentUser().getUid();
+        userRef = db.collection("Users").document(currentUserID);
 
         drawerLayout = findViewById(R.id.main_container);
-        topAppBar = findViewById(R.id.main_topAppBar);
         bottomAppBar = findViewById(R.id.main_bottomAppBar);
+        topAppBar = findViewById(R.id.main_topAppBar);
         setSupportActionBar(topAppBar);
         navigationView = findViewById(R.id.main_navigationdrawer);
 
@@ -82,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
                 .setPersistenceEnabled(true)
                 .build();
-        firebaseFirestore.setFirestoreSettings(settings);
+        db.setFirestoreSettings(settings);
 
         bottomAppBar.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -128,21 +125,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onStart() {
         super.onStart();
-        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+        FirebaseUser currentUser = userAuth.getCurrentUser();
         if (currentUser == null) {
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
-            overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
             finish();
         } else {
-            documentListener = documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            userRef.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
                 @Override
                 public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
                     if (value != null && value.exists()) {
-                        String display_name = value.get("display_name").toString();
-                        String barter_score = value.get("barter_score").toString();
-                        String image = value.get("profile_image").toString();
+                        String display_name = value.getString("display_name");
+                        String barter_score = value.getString("barter_score");
+                        String image = value.getString("profile_image");
                         userProfileDisplayName.setText(display_name);
                         userProfileBarterScore.setText(barter_score);
                         Picasso.get()
@@ -152,12 +148,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
             });
         }
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        documentListener.remove();
     }
 
     @Override
@@ -180,10 +170,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (id == R.id.btn_profile) {
             Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
             startActivity(intent);
-            overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
             drawerLayout.closeDrawers();
         }
         if (id == R.id.btn_help) {
+            fragment = new HomeFragment();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.main_hostFragment, fragment)
+                    .commit();
+            drawerLayout.closeDrawers();
+        }
+        if (id == R.id.btn_about) {
             fragment = new HomeFragment();
             fragmentManager.beginTransaction()
                     .replace(R.id.main_hostFragment, fragment)
@@ -199,15 +195,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void logoutUser() {
-        firebaseAuth.signOut();
+        userAuth.signOut();
         Toast.makeText(this, "Signing out...", Toast.LENGTH_SHORT).show();
-        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+        FirebaseUser currentUser = userAuth.getCurrentUser();
         if (currentUser == null) {
             Toast.makeText(this, "Signed out.", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
-            overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
             finish();
         }
     }
