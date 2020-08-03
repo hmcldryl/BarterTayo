@@ -15,8 +15,8 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:orientation="vertical"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp">
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp">
 
         <TextView
             android:layout_width="300dp"
@@ -121,9 +121,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:hint="Last Name"
-            android:textColorHint="@color/textColorHint"
             app:boxStrokeColor="@color/iconTint"
             app:hintEnabled="true"
+            app:hintTextColor="@color/textColorHint"
             app:startIconDrawable="@drawable/ic_small_name">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -143,9 +143,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:hint="Birth Date"
-            android:textColorHint="@color/textColorHint"
             app:boxStrokeColor="@color/iconTint"
             app:hintEnabled="true"
+            app:hintTextColor="@color/textColorHint"
             app:startIconDrawable="@drawable/ic_small_birthdate">
 
             <com.google.android.material.textfield.TextInputEditText

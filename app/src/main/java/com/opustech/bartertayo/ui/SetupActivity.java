@@ -28,6 +28,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -46,6 +47,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -58,7 +60,6 @@ public class SetupActivity extends AppCompatActivity {
     private FirebaseAuth userAuth;
     private FirebaseFirestore db;
     private DocumentReference userRef;
-    private DocumentReference profileImageRef;
     private StorageReference profileImageFilePathRef;
     private StorageReference profileImageFileNameRef;
     private CircleImageView user_dpic;
@@ -74,12 +75,8 @@ public class SetupActivity extends AppCompatActivity {
 
         userAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
-        userRef = db.document("Users/"+ currentUserID)
-        ;
-        profileImageFilePathRef = profileImageFileNameRef.child(currentUserID + ".jpg");
-        profileImageFileNameRef = FirebaseStorage.getInstance().getReference().child("profile_image");
-        profileImageRef = db.collection("Users").document(currentUserID + "/profile_image");
         currentUserID = userAuth.getCurrentUser().getUid();
+        userRef = db.document("Users/" + currentUserID);
 
         user_dname = findViewById(R.id.regDisplayName);
         user_fname = findViewById(R.id.regFirstName);
@@ -162,9 +159,7 @@ public class SetupActivity extends AppCompatActivity {
                     hashMap.put("followers", "0");
                     hashMap.put("bio", "Sana all barterist.");
 
-                    db.collection("Users")
-                            .document(currentUserID)
-                            .set(hashMap)
+                    userRef.update(hashMap)
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
@@ -200,17 +195,19 @@ public class SetupActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         } else {
-            userRef.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
-                @Override
-                public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                    if (value != null && value.exists()) {
-                        String image = value.getString("profile_image");
-                        Picasso.get()
-                                .load(image)
-                                .into(user_dpic);
+            if (userRef != null) {
+                userRef.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                        if (value != null && value.exists()) {
+                            String image = value.getString("profile_image");
+                            Picasso.get()
+                                    .load(image)
+                                    .into(user_dpic);
+                        }
                     }
-                }
-            });
+                });
+            }
         }
     }
 
@@ -230,7 +227,9 @@ public class SetupActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 assert result != null;
                 Uri resultUri = result.getUri();
-                profileImageFilePathRef.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                FirebaseStorage.getInstance().getReference().child("profile_image")
+                        .child(currentUserID + ".jpg")
+                        .putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                         if (task.isSuccessful()) {
@@ -239,8 +238,9 @@ public class SetupActivity extends AppCompatActivity {
                                 @Override
                                 public void onSuccess(Uri uri) {
                                     final String downloadUrl = uri.toString();
-                                    profileImageRef
-                                            .set(downloadUrl)
+                                    HashMap<String, Object> hashMap = new HashMap<>();
+                                    hashMap.put("profile_image", downloadUrl);
+                                    userRef.set(hashMap)
                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                 @Override
                                                 public void onSuccess(Void aVoid) {
