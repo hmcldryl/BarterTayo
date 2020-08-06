@@ -7,25 +7,17 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.chip.Chip;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
-import com.google.firebase.firestore.ListenerRegistration;
 import com.opustech.bartertayo.R;
 import com.squareup.picasso.Picasso;
 
@@ -40,7 +32,7 @@ import androidx.fragment.app.FragmentManager;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity {
 
     private Toolbar topAppBar;
     private DrawerLayout drawerLayout;
@@ -119,7 +111,47 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
-        navigationView.setNavigationItemSelectedListener(this);
+
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+                Fragment fragment;
+                FragmentManager fragmentManager = getSupportFragmentManager();
+
+                if (id == R.id.btn_logout) {
+                    logoutUser();
+                    drawerLayout.closeDrawers();
+                }
+                if (id == R.id.navigation_home) {
+                    fragment = new HomeFragment();
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.main_hostFragment, fragment)
+                            .commit();
+                    drawerLayout.closeDrawers();
+                }
+                if (id == R.id.navigation_profile) {
+                    Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
+                    startActivity(intent);
+                    drawerLayout.closeDrawers();
+                }
+                if (id == R.id.navigation_help) {
+                    fragment = new HomeFragment();
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.main_hostFragment, fragment)
+                            .commit();
+                    drawerLayout.closeDrawers();
+                }
+                if (id == R.id.navigation_about) {
+                    fragment = new HomeFragment();
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.main_hostFragment, fragment)
+                            .commit();
+                    drawerLayout.closeDrawers();
+                }
+                return true;
+            }
+        });
     }
 
     @Override
@@ -137,7 +169,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
                     if (value != null && value.exists()) {
                         String display_name = value.getString("display_name");
-                        String barter_score = value.getString("barter_score");
+                        String barter_score = value.getString("barter_score") + " BarterScore";
                         String image = value.getString("profile_image");
                         userProfileDisplayName.setText(display_name);
                         userProfileBarterScore.setText(barter_score);
@@ -148,50 +180,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
             });
         }
-    }
-
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-        Fragment fragment;
-        FragmentManager fragmentManager = getSupportFragmentManager();
-
-        if (id == R.id.btn_logout) {
-            logoutUser();
-            drawerLayout.closeDrawers();
-        }
-        if (id == R.id.btn_home) {
-            fragment = new HomeFragment();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.main_hostFragment, fragment)
-                    .commit();
-            drawerLayout.closeDrawers();
-        }
-        if (id == R.id.btn_profile) {
-            Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
-            startActivity(intent);
-            drawerLayout.closeDrawers();
-        }
-        if (id == R.id.btn_help) {
-            fragment = new HomeFragment();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.main_hostFragment, fragment)
-                    .commit();
-            drawerLayout.closeDrawers();
-        }
-        if (id == R.id.btn_about) {
-            fragment = new HomeFragment();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.main_hostFragment, fragment)
-                    .commit();
-            drawerLayout.closeDrawers();
-        }
-        return true;
-    }
-
-    @Override
-    public void onPointerCaptureChanged(boolean hasCapture) {
-
     }
 
     private void logoutUser() {

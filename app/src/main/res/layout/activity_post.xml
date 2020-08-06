@@ -59,8 +59,12 @@
             android:layout_marginTop="10dp">
 
             <LinearLayout
+                android:id="@+id/imageContainer"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="300dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -68,73 +72,69 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="5dp"
-                    android:clickable="true"
-                    android:focusable="true"
                     android:scaleType="centerCrop"
                     android:src="@drawable/placeholder_add_barterpost"
                     android:visibility="visible" />
 
-                <ImageView
-                    android:id="@+id/postImages2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="5dp"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/placeholder_add_barterpost"
-                    android:visibility="visible" />
-
-                <ImageView
-                    android:id="@+id/postImages3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="5dp"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/placeholder_add_barterpost"
-                    android:visibility="visible" />
-
-                <ImageView
-                    android:id="@+id/postImages4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="5dp"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/placeholder_add_barterpost"
-                    android:visibility="visible" />
-
-                <ImageView
-                    android:id="@+id/postImages5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/placeholder_add_barterpost"
-                    android:visibility="visible" />
             </LinearLayout>
         </HorizontalScrollView>
 
         <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chip_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp">
-
-            <com.google.android.material.chip.Chip
-                style="@style/Widget.MaterialComponents.Chip.Action"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/montserrat"
-                android:text="barter_post_tag"
-                app:chipBackgroundColor="@color/colorPrimary" />
+            android:layout_margin="10dp"
+            app:singleSelection="true">
 
         </com.google.android.material.chip.ChipGroup>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:hint="Add tags (e.g. accessory, food, gadget...)"
+                app:boxBackgroundColor="@color/colorPrimary"
+                app:boxStrokeColor="@color/iconTint"
+                app:counterTextColor="@color/textColorHint"
+                app:endIconDrawable="@drawable/ic_addbarter_icon"
+                app:hintTextColor="@color/textColorHint">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editTags"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/montserrat"
+                    android:gravity="top"
+                    android:inputType="textMultiLine"
+                    android:maxLength="15"
+                    android:textColorHint="@color/textColorHint"
+                    android:textCursorDrawable="@null"
+                    android:textSize="15sp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="10dp"
+                android:backgroundTint="#00F4B41A"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:src="@drawable/ic_addbarter_icon" />
+
+        </RelativeLayout>
 
     </LinearLayout>
 
