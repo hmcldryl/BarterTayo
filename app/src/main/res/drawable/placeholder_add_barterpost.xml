@@ -11,6 +11,6 @@
     <item
         android:width="100dp"
         android:height="100dp"
-        android:drawable="@drawable/ic_addbarter_icon"
+        android:drawable="@drawable/ic_icon_image_24"
         android:gravity="center" />
 </layer-list>

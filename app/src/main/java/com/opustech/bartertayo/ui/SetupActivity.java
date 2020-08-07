@@ -9,7 +9,6 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -23,18 +22,11 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -47,8 +39,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -60,8 +50,6 @@ public class SetupActivity extends AppCompatActivity {
     private FirebaseAuth userAuth;
     private FirebaseFirestore db;
     private DocumentReference userRef;
-    private StorageReference profileImageFilePathRef;
-    private StorageReference profileImageFileNameRef;
     private CircleImageView user_dpic;
     ProgressBar progressBar;
     String currentUserID;
@@ -227,7 +215,7 @@ public class SetupActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 assert result != null;
                 Uri resultUri = result.getUri();
-                FirebaseStorage.getInstance().getReference().child("profile_image")
+                FirebaseStorage.getInstance().getReference().child(currentUserID).child("profile_image")
                         .child(currentUserID + ".jpg")
                         .putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                     @Override

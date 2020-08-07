@@ -24,7 +24,7 @@
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="300dp"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_gravity="center"
             android:hint="E-mail"
             app:boxStrokeColor="@color/iconTint"
@@ -38,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/montserrat"
                 android:inputType="textEmailAddress"
-                android:textColorHint="@color/textColorHint"
+                android:maxLines="1"
                 android:textCursorDrawable="@null"
                 android:textSize="15sp" />
 
@@ -47,10 +47,9 @@
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="300dp"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_gravity="center"
             android:hint="Password"
-            android:textColorHint="@color/textColorHint"
             app:boxStrokeColor="@color/iconTint"
             app:errorEnabled="true"
             app:hintEnabled="true"
@@ -64,6 +63,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/montserrat"
                 android:inputType="textPassword"
+                android:maxLines="1"
                 android:textColor="@color/textColor"
                 android:textCursorDrawable="@null"
                 android:textSize="15sp" />
@@ -74,6 +74,7 @@
             android:layout_width="300dp"
             android:layout_height="50dp"
             android:layout_gravity="center"
+            android:layout_marginTop="10dp"
             android:clickable="true"
             android:focusable="true"
             android:foreground="?android:attr/selectableItemBackground"

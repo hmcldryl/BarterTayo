@@ -14,14 +14,13 @@ import com.opustech.bartertayo.R;
 
 public class HomeFragment extends Fragment {
 
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
+    private HomeViewPagerAdapter homeViewPagerAdapter;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_home, container, false);
-
-        TabLayout tabLayout;
-        ViewPager viewPager;
-        HomeViewPagerAdapter homeViewPagerAdapter;
 
         viewPager = root.findViewById(R.id.homeViewPager);
         tabLayout = root.findViewById(R.id.homeTab);

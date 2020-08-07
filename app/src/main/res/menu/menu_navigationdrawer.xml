@@ -3,33 +3,33 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/btn_home"
+        android:id="@+id/navigation_home"
         android:icon="@drawable/ic_icon_home_24"
         android:title="Home"
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/btn_profile"
+        android:id="@+id/navigation_profile"
         android:icon="@drawable/ic_icon_profile_24"
-        app:showAsAction="ifRoom"
-        android:title="Profile" />
+        android:title="Profile"
+        app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/btn_help"
+        android:id="@+id/navigation_help"
         android:icon="@drawable/ic_icon_help_24"
-        app:showAsAction="ifRoom"
-        android:title="Help" />
+        android:title="Help"
+        app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/btn_about"
+        android:id="@+id/navigation_about"
         android:icon="@drawable/ic_icon_about_24"
-        app:showAsAction="ifRoom"
-        android:title="About" />
+        android:title="About"
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/btn_logout"
-        android:icon="@drawable/ic_signout"
-        app:showAsAction="ifRoom"
-        android:title="Logout" />
+        android:icon="@drawable/ic_icon_signout_24"
+        android:title="Logout"
+        app:showAsAction="ifRoom" />
 
 </menu>
