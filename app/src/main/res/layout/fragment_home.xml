@@ -34,14 +34,4 @@
         android:layout_height="match_parent"
         android:background="@drawable/background_body" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_addBarter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="20dp"
-        android:src="@drawable/ic_addbarter_icon"
-        android:tint="@color/iconTint"
-        app:backgroundTint="@color/colorPrimary" />
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -30,7 +30,10 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
-                    android:background="@drawable/placeholder_userpicture_post" />
+                    android:background="@drawable/placeholder_userpicture_post"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -103,6 +106,7 @@
                     android:layout_height="wrap_content">
 
                     <LinearLayout
+                        android:id="@+id/postImagesContainer"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
@@ -169,8 +173,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
-                    app:singleLine="true"
-                    android:layout_marginEnd="10dp">
+                    android:layout_marginEnd="10dp"
+                    app:singleLine="true">
 
                     <com.google.android.material.chip.Chip
                         style="@style/Widget.MaterialComponents.Chip.Action"
@@ -256,6 +260,9 @@
                     android:id="@+id/postOfferPhotoBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="5dp"
                     android:layout_toStartOf="@+id/postOfferSendBtn"
@@ -267,6 +274,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="5dp"
                     android:layout_marginEnd="10dp"

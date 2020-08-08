@@ -5,5 +5,5 @@
         android:id="@+id/btn_post"
         android:icon="@drawable/ic_icon_createpost_24"
         android:title="Create Post"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
 </menu>

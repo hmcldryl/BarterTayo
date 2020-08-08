@@ -2,6 +2,7 @@ package com.opustech.bartertayo.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -42,10 +43,15 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private DocumentReference userRef;
     private CircleImageView userProfileImage;
-    private TextView userProfileDisplayName;
+    private TextView userProfileDisplayName, userProfileFollowers, userProfileFollowing;
     private Chip userProfileBarterScore;
     private String currentUserID;
 
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_topappbar, menu);
+        return super.onPrepareOptionsMenu(menu);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,12 +67,16 @@ public class MainActivity extends AppCompatActivity {
         bottomAppBar = findViewById(R.id.main_bottomAppBar);
         topAppBar = findViewById(R.id.main_topAppBar);
         setSupportActionBar(topAppBar);
+
+
         navigationView = findViewById(R.id.main_navigationdrawer);
 
         View navView = navigationView.inflateHeaderView(R.layout.nav_header);
         userProfileImage = navView.findViewById(R.id.userProfilePhotoDrawer);
         userProfileDisplayName = navView.findViewById(R.id.userDisplayNameDrawer);
         userProfileBarterScore = navView.findViewById(R.id.userBarterScoreDrawer);
+        userProfileFollowers = navView.findViewById(R.id.userFollowerCountDrawer);
+        userProfileFollowing = navView.findViewById(R.id.userFollowingCountDrawer);
 
         FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
                 .setPersistenceEnabled(true)
@@ -136,14 +146,14 @@ public class MainActivity extends AppCompatActivity {
                     drawerLayout.closeDrawers();
                 }
                 if (id == R.id.navigation_help) {
-                    fragment = new HomeFragment();
+                    fragment = new HelpFragment();
                     fragmentManager.beginTransaction()
                             .replace(R.id.main_hostFragment, fragment)
                             .commit();
                     drawerLayout.closeDrawers();
                 }
                 if (id == R.id.navigation_about) {
-                    fragment = new HomeFragment();
+                    fragment = new AboutFragment();
                     fragmentManager.beginTransaction()
                             .replace(R.id.main_hostFragment, fragment)
                             .commit();
@@ -169,10 +179,14 @@ public class MainActivity extends AppCompatActivity {
                 public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
                     if (value != null && value.exists()) {
                         String display_name = value.getString("display_name");
+                        String followers = "Followers " + value.getString("followers");
+                        String following = "Following " + value.getString("following");
                         String barter_score = value.getString("barter_score") + " BarterScore";
                         String image = value.getString("profile_image");
                         userProfileDisplayName.setText(display_name);
                         userProfileBarterScore.setText(barter_score);
+                        userProfileFollowers.setText(followers);
+                        userProfileFollowing.setText(following);
                         Picasso.get()
                                 .load(image)
                                 .into(userProfileImage);

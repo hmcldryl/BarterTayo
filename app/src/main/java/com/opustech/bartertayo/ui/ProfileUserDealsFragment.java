@@ -15,7 +15,7 @@ public class ProfileUserDealsFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_posts, container, false);
+        View root = inflater.inflate(R.layout.fragment_profile_deals, container, false);
 
         return root;
     }

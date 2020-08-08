@@ -4,24 +4,23 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
+import java.util.ArrayList;
+
 public class HomeViewPagerAdapter extends FragmentPagerAdapter {
+    private ArrayList<Fragment> fragments;
 
     public HomeViewPagerAdapter(FragmentManager fm) {
         super(fm);
+        this.fragments = new ArrayList<>();
+    }
+
+    public void add(Fragment fragment) {
+        this.fragments.add(fragment);
     }
 
     @Override
     public Fragment getItem(int position) {
-        Fragment fragment = null;
-        if (position == 0)
-        {
-            fragment = new NewsFragment();
-        }
-        else if (position == 1)
-        {
-            fragment = new PostsFragment();
-        }
-        return fragment;
+        return this.fragments.get(position);
     }
 
     @Override

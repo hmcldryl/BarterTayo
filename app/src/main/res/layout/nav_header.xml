@@ -1,49 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/background_drawer_header"
     android:gravity="top"
     android:orientation="vertical"
-    android:paddingTop="16dp"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/userProfilePhotoDrawer"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="40dp"
-        android:layout_marginBottom="20dp"
-        android:background="@drawable/placeholder_userpicture" />
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:src="@drawable/background_body" />
 
-    <TextView
-        android:id="@+id/userDisplayNameDrawer"
-        android:layout_width="250dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:ellipsize="end"
-        android:fontFamily="@font/montserrat_bold"
-        android:maxLength="15"
-        android:maxLines="1"
-        android:text="display_name"
-        android:textAlignment="center"
-        android:textColor="@color/textColor"
-        android:textSize="18sp" />
+        android:orientation="vertical"
+        android:paddingTop="16dp">
 
-    <com.google.android.material.chip.Chip
-        android:id="@+id/userBarterScoreDrawer"
-        style="@style/Widget.MaterialComponents.Chip.Entry"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:checkable="false"
-        android:text="barter_score"
-        app:checkedIconEnabled="false"
-        app:chipBackgroundColor="@color/colorPrimary"
-        app:closeIconEnabled="false"
-        app:iconEndPadding="5dp"
-        app:iconStartPadding="10dp" />
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/userProfilePhotoDrawer"
+            android:layout_width="125dp"
+            android:layout_height="125dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="90dp"
+            android:background="@drawable/placeholder_userpicture"
+            android:elevation="8dp" />
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/userDisplayNameDrawer"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:ellipsize="end"
+            android:fontFamily="@font/montserrat_bold"
+            android:maxLength="15"
+            android:maxLines="1"
+            android:text="display_name"
+            android:textAlignment="center"
+            android:textColor="@color/textColor"
+            android:textSize="16sp" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/userBarterScoreDrawer"
+            style="@style/Widget.MaterialComponents.Chip.Entry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:checkable="false"
+            android:maxLines="1"
+            android:text="barter_score"
+            android:textSize="14sp"
+            app:checkedIconEnabled="false"
+            app:chipBackgroundColor="@color/colorPrimary"
+            app:closeIconEnabled="false" />
+
+        <LinearLayout
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <TextView
+                android:id="@+id/userFollowerCountDrawer"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:fontFamily="@font/montserrat"
+                android:text="follower_count"
+                android:textAlignment="center"
+                android:textColor="@color/textColor"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/userFollowingCountDrawer"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:fontFamily="@font/montserrat"
+                android:text="following_count"
+                android:textAlignment="center"
+                android:textColor="@color/textColor"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+
+</RelativeLayout>

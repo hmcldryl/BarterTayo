@@ -17,6 +17,12 @@
         app:navigationIcon="@drawable/ic_button_back"
         app:title="Your BarterTayo Profile" />
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:layout_below="@id/header"
+        android:src="@drawable/background_body" />
+
     <LinearLayout
         android:id="@+id/body"
         android:layout_width="match_parent"
@@ -29,7 +35,7 @@
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_gravity="center"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="50dp"
             android:layout_marginBottom="5dp"
             android:background="@drawable/placeholder_userpicture"
             android:elevation="8dp" />
@@ -40,7 +46,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:fontFamily="@font/montserrat_bold"
-            android:text=""
+            android:text="display_name"
             android:textAlignment="center"
             android:textColor="@color/textColor"
             android:textSize="20sp" />
@@ -51,7 +57,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:fontFamily="@font/montserrat"
-            android:text=""
+            android:text="full_name"
             android:textAlignment="center"
             android:textColor="#BF121212"
             android:textSize="16sp" />
@@ -63,7 +69,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:checkable="false"
-            android:text=""
+            android:text="barter_score"
             app:checkedIconEnabled="false"
             app:chipBackgroundColor="@color/colorPrimary"
             app:closeIconEnabled="false"
@@ -87,7 +93,7 @@
                 android:layout_marginStart="5dp"
                 android:layout_weight="1"
                 android:fontFamily="@font/montserrat"
-                android:text=""
+                android:text="follower_count"
                 android:textAlignment="center"
                 android:textColor="@color/textColor"
                 android:textSize="16sp" />
@@ -100,7 +106,7 @@
                 android:layout_marginEnd="5dp"
                 android:layout_weight="1"
                 android:fontFamily="@font/montserrat"
-                android:text=""
+                android:text="following_count"
                 android:textAlignment="center"
                 android:textColor="@color/textColor"
                 android:textSize="16sp" />

@@ -14,9 +14,9 @@ import com.opustech.bartertayo.R;
 
 public class HomeFragment extends Fragment {
 
+    private HomeViewPagerAdapter homeViewPagerAdapter;
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    private HomeViewPagerAdapter homeViewPagerAdapter;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -24,8 +24,10 @@ public class HomeFragment extends Fragment {
 
         viewPager = root.findViewById(R.id.homeViewPager);
         tabLayout = root.findViewById(R.id.homeTab);
-        homeViewPagerAdapter = new HomeViewPagerAdapter(getActivity().getSupportFragmentManager());
-        viewPager.setAdapter(homeViewPagerAdapter);
+        this.homeViewPagerAdapter = new HomeViewPagerAdapter(getChildFragmentManager());
+        this.homeViewPagerAdapter.add(new NewsFragment());
+        this.homeViewPagerAdapter.add(new PostsFragment());
+        viewPager.setAdapter(this.homeViewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
 
         return root;
