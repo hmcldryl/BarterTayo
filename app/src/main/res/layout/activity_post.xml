@@ -58,69 +58,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp">
+            android:layout_marginBottom="10dp"
+            android:scrollbars="none">
 
             <LinearLayout
                 android:id="@+id/postImagesContainer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal" />
 
-                <ImageView
-                    android:id="@+id/postImages1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="5dp"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/placeholder_add_barterpost"
-                    android:visibility="visible" />
-
-                <ImageView
-                    android:id="@+id/postImages2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="5dp"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/placeholder_add_barterpost"
-                    android:visibility="visible" />
-
-                <ImageView
-                    android:id="@+id/postImages3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="5dp"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/placeholder_add_barterpost"
-                    android:visibility="visible" />
-
-                <ImageView
-                    android:id="@+id/postImages4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="5dp"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/placeholder_add_barterpost"
-                    android:visibility="visible" />
-
-                <ImageView
-                    android:id="@+id/postImages5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/placeholder_add_barterpost"
-                    android:visibility="visible" />
-
-            </LinearLayout>
         </HorizontalScrollView>
 
         <RelativeLayout
@@ -137,11 +83,11 @@
                 android:layout_gravity="center"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
-                android:layout_toStartOf="@+id/btnAddImage"
+                android:layout_toStartOf="@+id/btnAddTag"
                 android:ellipsize="end"
                 android:fontFamily="@font/montserrat"
                 android:gravity="top"
-                android:hint="Add tags"
+                android:hint="Add tags or keywords"
                 android:inputType="textMultiLine"
                 android:maxLength="32"
                 android:paddingStart="10dp"
@@ -155,7 +101,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_centerVertical="true"
-                android:layout_marginEnd="20dp"
+                android:layout_marginEnd="10dp"
                 android:layout_toStartOf="@+id/btnAddImage"
                 android:backgroundTint="#00FFFFFF"
                 android:clickable="true"

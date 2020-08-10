@@ -9,12 +9,14 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -24,12 +26,17 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.opustech.bartertayo.R;
+import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -44,10 +51,11 @@ public class PostActivity extends AppCompatActivity {
     private ChipGroup postTagCG;
     private ImageView btnAddImage;
     private ImageButton btnAddTag;
-    private FirebaseAuth userAuth;
+    private FirebaseAuth auth;
     private FirebaseFirestore db;
-    private DocumentReference userRef;
-    private StorageReference postImage;
+    private CollectionReference usersCollectionRef, postsCollectionRef;
+    private DocumentReference postsDocumentRef;
+    private StorageReference storage, postsStorageRef;
     private String currentUserID;
     private Uri[] imageUri;
     final static int PICK_IMAGE = 1;
@@ -74,11 +82,22 @@ public class PostActivity extends AppCompatActivity {
             }
         });
 
-        userAuth = FirebaseAuth.getInstance();
+        auth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
-        currentUserID = userAuth.getCurrentUser().getUid();
-        userRef = db.document("Users/" + currentUserID);
-        postImage = FirebaseStorage.getInstance().getReference();
+        storage = FirebaseStorage.getInstance().getReference();
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
+        SimpleDateFormat timeFormat = new SimpleDateFormat("hh-mm-ss", Locale.ENGLISH);
+        String date = dateFormat.format(Calendar.getInstance().getTime());
+        String time = timeFormat.format(Calendar.getInstance().getTime());
+
+        currentUserID = auth.getCurrentUser().getUid();
+        usersCollectionRef = db.collection("users");
+        postsCollectionRef = db.collection("posts");
+        postsDocumentRef = postsCollectionRef.document(currentUserID + "_" + date + "_" + time);
+        postsStorageRef = storage.child(currentUserID)
+                .child("uploaded_images")
+                .child("posts");
 
         btnAddTag = findViewById(R.id.btnAddTag);
         postTag = findViewById(R.id.postTag);
@@ -89,21 +108,27 @@ public class PostActivity extends AppCompatActivity {
         btnAddTag.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Chip chip = new Chip(PostActivity.this);
-                String tag = postTag.getText().toString();
-                chip.setChipBackgroundColorResource(R.color.colorPrimary);
-                chip.setCloseIconVisible(true);
-                chip.setChecked(true);
-                chip.setText(tag);
-                chip.setOnCloseIconClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        postTagCG.removeView(chip);
-                    }
-                });
-
-                postTagCG.addView(chip);
-                postTag.getText().clear();
+                if (!postTag.getText().toString().isEmpty()) {
+                    final Chip chip = new Chip(PostActivity.this);
+                    String tag = postTag.getText().toString();
+                    chip.setChipBackgroundColorResource(R.color.colorPrimary);
+                    chip.setCloseIconVisible(true);
+                    chip.setChecked(true);
+                    chip.setText(tag);
+                    chip.setOnCloseIconClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            postTagCG.removeView(chip);
+                        }
+                    });
+                    postTagCG.addView(chip);
+                    postTag.getText().clear();
+                }
+                if (postTag.getText().toString().length() <= 2) {
+                    postTag.setError("Please enter a valid keyword.");
+                } else {
+                    postTag.setError("Please enter at least one (1) keyword.");
+                }
             }
         });
 
@@ -123,7 +148,20 @@ public class PostActivity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 int id = item.getItemId();
                 if (id == R.id.btn_post) {
-                    validateFields();
+                    if (postTagCG.getChildCount() > 0 && !postCaption.getText().toString().isEmpty()) {
+                        String[] tagArray = new String[postTagCG.getChildCount()];
+                        String post_caption = postCaption.getText().toString();
+                        for (int i = 0; i < postTagCG.getChildCount(); i++) {
+                            Chip chip = (Chip) postTagCG.getChildAt(i);
+                            tagArray[i] = chip.getText().toString();
+                        }
+                    }
+                    if (postTagCG.getChildCount() == 0) {
+                        Toast.makeText(PostActivity.this, "Please enter at least one (1) or more tags.", Toast.LENGTH_SHORT).show();
+                    }
+                    if (postCaption.getText().toString().isEmpty()) {
+                        postCaption.setError("Please provide a description for your post.");
+                    }
                 }
                 return true;
             }
@@ -131,41 +169,16 @@ public class PostActivity extends AppCompatActivity {
 
     }
 
-    private void validateFields() {
-        String[] tagArray = new String[postTagCG.getChildCount()];
-        String post_caption = postCaption.getText().toString();
-        String result = "";
-        for (int i = 0; i < postTagCG.getChildCount(); i++) {
-            Chip chip = (Chip) postTagCG.getChildAt(i);
-            tagArray[i] = chip.getText().toString();
-        }
-        if (tagArray.length > 0) {
-            StringBuilder stringBuilder = new StringBuilder();
-            for (String tags : tagArray) {
-                stringBuilder.append(tags).append(", ");
-            }
-            result = stringBuilder.deleteCharAt(stringBuilder.length() - 1).toString();
-        }
-        Toast.makeText(this, "Tags: " + result, Toast.LENGTH_SHORT).show();
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE && resultCode == RESULT_OK && data != null) {
-            Calendar calendar = Calendar.getInstance();
-            SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy", Locale.ENGLISH);
-            SimpleDateFormat timeFormat = new SimpleDateFormat("HH-mm", Locale.ENGLISH);
-            String date = dateFormat.format(calendar.getTime());
-            String time = timeFormat.format(calendar.getTime());
             int count = data.getClipData().getItemCount();
             imageUri = new Uri[count];
-            for (int currentImageSelect = 0; currentImageSelect < count; currentImageSelect++) {
-                Uri uri = data.getClipData().getItemAt(currentImageSelect).getUri();
-                imageUri[currentImageSelect] = uri;
-                postImage.child(currentUserID)
-                        .child("uploaded_images")
-                        .child(currentUserID + "_" + date + "_" + time + "_" + (currentImageSelect) + ".jpg")
+            for (int i = 0; i < count; i++) {
+                Uri uri = data.getClipData().getItemAt(i).getUri();
+                imageUri[i] = uri;
+                postsStorageRef.child(currentUserID + "_" + i + ".jpg")
                         .putFile(uri)
                         .addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                             @Override
@@ -178,16 +191,21 @@ public class PostActivity extends AppCompatActivity {
                                             final String downloadUrl = uri.toString();
                                             HashMap<String, Object> hashMap = new HashMap<>();
                                             hashMap.put("url", downloadUrl);
-                                            userRef.collection("posts")
-                                                    .add(hashMap)
-                                                    .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                                            postsDocumentRef.update(hashMap)
+                                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
                                                         @Override
-                                                        public void onComplete(@NonNull Task<DocumentReference> task) {
+                                                        public void onComplete(@NonNull Task<Void> task) {
                                                             if (task.isSuccessful()) {
+                                                                LinearLayout uploadedImage = findViewById(R.id.postImagesContainer);
+                                                                LayoutInflater inflater = LayoutInflater.from(PostActivity.this);
+                                                                View view = inflater.inflate(R.layout.upload_image_item_layout, uploadedImage, false);
+                                                                ImageView postImage = view.findViewById(R.id.postImage);
+                                                                uploadedImage.addView(postImage);
+                                                                Picasso.get().load(downloadUrl).into(postImage);
+
                                                                 Toast.makeText(PostActivity.this, "Image upload success.", Toast.LENGTH_SHORT).show();
-                                                            }
-                                                            else {
-                                                                Log.d("BarterTayo",task.getException().getMessage());
+                                                            } else {
+                                                                Log.d("BarterTayo", task.getException().getMessage());
                                                                 Toast.makeText(PostActivity.this, "Error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                                                             }
                                                         }
@@ -195,12 +213,11 @@ public class PostActivity extends AppCompatActivity {
                                         }
                                     });
                                 } else {
-                                    Log.d("BarterTayo",task.getException().getMessage());
+                                    Log.d("BarterTayo", task.getException().getMessage());
                                     Toast.makeText(PostActivity.this, "Error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
-                currentImageSelect = currentImageSelect + 1;
             }
         }
     }
