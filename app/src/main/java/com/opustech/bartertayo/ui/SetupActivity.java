@@ -54,7 +54,7 @@ public class SetupActivity extends AppCompatActivity {
     ProgressBar progressBar;
     String currentUserID;
     final Calendar calendar = Calendar.getInstance();
-    final static int Gallery_Pick = 1;
+    final static int PICK_IMAGE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +64,7 @@ public class SetupActivity extends AppCompatActivity {
         userAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         currentUserID = userAuth.getCurrentUser().getUid();
-        userRef = db.document("Users/" + currentUserID);
+        userRef = db.document("users/" + currentUserID);
 
         user_dname = findViewById(R.id.regDisplayName);
         user_fname = findViewById(R.id.regFirstName);
@@ -82,7 +82,7 @@ public class SetupActivity extends AppCompatActivity {
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 intent.setType("image/*");
-                startActivityForResult(intent, Gallery_Pick);
+                startActivityForResult(intent, PICK_IMAGE);
             }
         });
 
@@ -203,7 +203,7 @@ public class SetupActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == Gallery_Pick && resultCode == RESULT_OK && data != null) {
+        if (requestCode == PICK_IMAGE && resultCode == RESULT_OK && data != null) {
             Uri imageUri = data.getData();
             CropImage.activity(imageUri)
                     .setGuidelines(CropImageView.Guidelines.ON)

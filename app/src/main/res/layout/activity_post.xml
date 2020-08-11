@@ -34,7 +34,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
-            android:hint="Enter post caption..."
+            android:hint="Enter post description"
             app:boxStrokeColor="@color/iconTint"
             app:counterEnabled="true"
             app:counterMaxLength="160"
@@ -42,7 +42,7 @@
             app:hintTextColor="@color/textColorHint">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/postCaption"
+                android:id="@+id/postDescription"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fontFamily="@font/montserrat"

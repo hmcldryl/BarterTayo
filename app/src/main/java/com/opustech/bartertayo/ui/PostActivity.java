@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -40,14 +42,19 @@ import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+
+import cc.cloudist.acplibrary.ACProgressConstant;
+import cc.cloudist.acplibrary.ACProgressFlower;
 
 public class PostActivity extends AppCompatActivity {
 
     private Toolbar topAppBar;
-    private EditText postCaption, postTag;
+    private EditText postDescription, postTag;
     private ChipGroup postTagCG;
     private ImageView btnAddImage;
     private ImageButton btnAddTag;
@@ -57,7 +64,10 @@ public class PostActivity extends AppCompatActivity {
     private DocumentReference postsDocumentRef;
     private StorageReference storage, postsStorageRef;
     private String currentUserID;
-    private Uri[] imageUri;
+    private ArrayList<Uri> imageUriList = new ArrayList<>();
+    private ArrayList<String> imageUrlList = new ArrayList<>();
+    private Uri imageUri;
+    private String TAG = "BARTERTAYO";
     final static int PICK_IMAGE = 1;
 
     @Override
@@ -95,13 +105,11 @@ public class PostActivity extends AppCompatActivity {
         usersCollectionRef = db.collection("users");
         postsCollectionRef = db.collection("posts");
         postsDocumentRef = postsCollectionRef.document(currentUserID + "_" + date + "_" + time);
-        postsStorageRef = storage.child(currentUserID)
-                .child("uploaded_images")
-                .child("posts");
+        postsStorageRef = storage.child(currentUserID);
 
         btnAddTag = findViewById(R.id.btnAddTag);
         postTag = findViewById(R.id.postTag);
-        postCaption = findViewById(R.id.postCaption);
+        postDescription = findViewById(R.id.postDescription);
         btnAddImage = findViewById(R.id.btnAddImage);
         postTagCG = findViewById(R.id.postTagCG);
 
@@ -124,11 +132,6 @@ public class PostActivity extends AppCompatActivity {
                     postTagCG.addView(chip);
                     postTag.getText().clear();
                 }
-                if (postTag.getText().toString().length() <= 2) {
-                    postTag.setError("Please enter a valid keyword.");
-                } else {
-                    postTag.setError("Please enter at least one (1) keyword.");
-                }
             }
         });
 
@@ -137,8 +140,8 @@ public class PostActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.setType("image/*");
-                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
                 intent.setAction(Intent.ACTION_GET_CONTENT);
+                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
                 startActivityForResult(intent, PICK_IMAGE);
             }
         });
@@ -148,20 +151,7 @@ public class PostActivity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 int id = item.getItemId();
                 if (id == R.id.btn_post) {
-                    if (postTagCG.getChildCount() > 0 && !postCaption.getText().toString().isEmpty()) {
-                        String[] tagArray = new String[postTagCG.getChildCount()];
-                        String post_caption = postCaption.getText().toString();
-                        for (int i = 0; i < postTagCG.getChildCount(); i++) {
-                            Chip chip = (Chip) postTagCG.getChildAt(i);
-                            tagArray[i] = chip.getText().toString();
-                        }
-                    }
-                    if (postTagCG.getChildCount() == 0) {
-                        Toast.makeText(PostActivity.this, "Please enter at least one (1) or more tags.", Toast.LENGTH_SHORT).show();
-                    }
-                    if (postCaption.getText().toString().isEmpty()) {
-                        postCaption.setError("Please provide a description for your post.");
-                    }
+                    uploadPost();
                 }
                 return true;
             }
@@ -169,57 +159,124 @@ public class PostActivity extends AppCompatActivity {
 
     }
 
+    private void uploadPost() {
+        if (postTagCG.getChildCount() > 0 && !postDescription.getText().toString().isEmpty()) {
+            final ACProgressFlower dialog = new ACProgressFlower.Builder(PostActivity.this)
+                    .direction(ACProgressConstant.DIRECT_CLOCKWISE)
+                    .themeColor(getResources().getColor(R.color.colorPrimary))
+                    .text("Uploading...")
+                    .fadeColor(Color.DKGRAY).build();
+            dialog.show();
+
+            if (imageUriList.size() >= 1) {
+                uploadImage();
+            }
+
+            String[] tagArray = new String[postTagCG.getChildCount()];
+            String description = postDescription.getText().toString();
+
+            for (int i = 0; i < postTagCG.getChildCount(); i++) {
+                Chip chip = (Chip) postTagCG.getChildAt(i);
+                tagArray[i] = chip.getText().toString();
+            }
+
+            List<String> tags = Arrays.asList(tagArray);
+
+            DataPost dataPost = new DataPost(currentUserID, description, imageUrlList, tags);
+
+            postsDocumentRef.set(dataPost)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (!task.isSuccessful()) {
+                                Log.d(TAG, task.getException().getMessage());
+                            } else {
+                                dialog.dismiss();
+                                finish();
+                            }
+                        }
+                    });
+        }
+        if (postTagCG.getChildCount() == 0) {
+            Toast.makeText(PostActivity.this, "Enter at least one (1) or more tags.", Toast.LENGTH_SHORT).show();
+        }
+        if (postDescription.getText().toString().isEmpty()) {
+            postDescription.setError("Provide a description to your post.");
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_IMAGE && resultCode == RESULT_OK && data != null) {
-            int count = data.getClipData().getItemCount();
-            imageUri = new Uri[count];
-            for (int i = 0; i < count; i++) {
-                Uri uri = data.getClipData().getItemAt(i).getUri();
-                imageUri[i] = uri;
-                postsStorageRef.child(currentUserID + "_" + i + ".jpg")
-                        .putFile(uri)
-                        .addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                                if (task.isSuccessful()) {
-                                    Task<Uri> result = task.getResult().getMetadata().getReference().getDownloadUrl();
-                                    result.addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                        @Override
-                                        public void onSuccess(Uri uri) {
-                                            final String downloadUrl = uri.toString();
-                                            HashMap<String, Object> hashMap = new HashMap<>();
-                                            hashMap.put("url", downloadUrl);
-                                            postsDocumentRef.update(hashMap)
-                                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                        @Override
-                                                        public void onComplete(@NonNull Task<Void> task) {
-                                                            if (task.isSuccessful()) {
-                                                                LinearLayout uploadedImage = findViewById(R.id.postImagesContainer);
-                                                                LayoutInflater inflater = LayoutInflater.from(PostActivity.this);
-                                                                View view = inflater.inflate(R.layout.upload_image_item_layout, uploadedImage, false);
-                                                                ImageView postImage = view.findViewById(R.id.postImage);
-                                                                uploadedImage.addView(postImage);
-                                                                Picasso.get().load(downloadUrl).into(postImage);
+        if (requestCode == PICK_IMAGE) {
+            if (resultCode == RESULT_OK) {
+                if (data != null) {
+                    if (data.getClipData() != null) {
+                        int countClipData = (int) data.getClipData().getItemCount();
+                        int currentImageSelect = 0;
 
-                                                                Toast.makeText(PostActivity.this, "Image upload success.", Toast.LENGTH_SHORT).show();
-                                                            } else {
-                                                                Log.d("BarterTayo", task.getException().getMessage());
-                                                                Toast.makeText(PostActivity.this, "Error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                                                            }
-                                                        }
-                                                    });
-                                        }
-                                    });
-                                } else {
-                                    Log.d("BarterTayo", task.getException().getMessage());
-                                    Toast.makeText(PostActivity.this, "Error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
+                        while (currentImageSelect < countClipData) {
+                            imageUri = data.getClipData().getItemAt(currentImageSelect).getUri();
+                            imageUriList.add(imageUri);
+                            loadImage(imageUri);
+                            currentImageSelect = currentImageSelect + 1;
+                        }
+                        Toast.makeText(this, "You uploaded " + imageUriList.size() + " images.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        imageUri = data.getData();
+                        imageUriList.add(imageUri);
+                        loadImage(imageUri);
+                        Toast.makeText(this, "You uploaded 1 image.", Toast.LENGTH_SHORT).show();
+                    }
+                }
             }
+
         }
+    }
+
+    private void uploadImage() {
+        for (int i = 0; i < imageUriList.size(); i++) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy_hh-mm-ss", Locale.ENGLISH);
+            String dateTime = dateFormat.format(Calendar.getInstance().getTime());
+            Uri uri = imageUriList.get(i);
+            postsStorageRef.child(dateTime + "_" + i + ".jpg")
+                    .putFile(uri)
+                    .addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                Task<Uri> result = task.getResult().getMetadata().getReference().getDownloadUrl();
+                                result.addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                    @Override
+                                    public void onSuccess(Uri uri) {
+                                        final String imageUrl = uri.toString();
+                                        imageUrlList.add(imageUrl);
+                                    }
+                                });
+                            } else {
+                                Log.d(TAG, task.getException().getMessage());
+                            }
+                        }
+                    });
+        }
+    }
+
+    private void loadImage(Uri imageUri) {
+        final LinearLayout uploadedImage = findViewById(R.id.postImagesContainer);
+        LayoutInflater inflater = LayoutInflater.from(PostActivity.this);
+        View view = inflater.inflate(R.layout.upload_image_item_layout, uploadedImage, false);
+        final ImageView postImage = view.findViewById(R.id.postImage);
+        if (postImage.getParent() != null) {
+            ((ViewGroup) postImage.getParent()).removeView(postImage);
+        }
+        uploadedImage.addView(postImage);
+        Picasso.get().load(imageUri).into(postImage);
+        postImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                uploadedImage.removeView(postImage);
+            }
+        });
     }
 
 }
