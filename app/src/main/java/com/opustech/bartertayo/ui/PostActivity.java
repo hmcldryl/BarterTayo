@@ -2,9 +2,11 @@ package com.opustech.bartertayo.ui;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
@@ -22,7 +24,6 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.chip.Chip;
@@ -30,10 +31,7 @@ import com.google.android.material.chip.ChipGroup;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -44,7 +42,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -58,6 +55,7 @@ public class PostActivity extends AppCompatActivity {
     private ChipGroup postTagCG;
     private ImageView btnAddImage;
     private ImageButton btnAddTag;
+    private LinearLayout uploadedImage;
     private FirebaseAuth auth;
     private FirebaseFirestore db;
     private CollectionReference usersCollectionRef, postsCollectionRef;
@@ -67,8 +65,38 @@ public class PostActivity extends AppCompatActivity {
     private ArrayList<Uri> imageUriList = new ArrayList<>();
     private ArrayList<String> imageUrlList = new ArrayList<>();
     private Uri imageUri;
-    private String TAG = "BARTERTAYO";
     final static int PICK_IMAGE = 1;
+    private String TAG = "OPUSTECH_DEBUG";
+
+    @Override
+    public void onBackPressed() {
+        final AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        alertDialog.setMessage("Save post as draft?");
+        alertDialog.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        alertDialog.setNegativeButton("Delete", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                if (imageUrlList.size() > 0) {
+                    for (int i = 0; i < imageUrlList.size(); i++) {
+                        FirebaseStorage.getInstance().getReferenceFromUrl(imageUrlList.get(i))
+                                .delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                            }
+                        });
+                    }
+                    imageUrlList.clear();
+                    clearImage();
+                }
+                dialog.dismiss();
+                finish();
+            }
+        });
+        alertDialog.show();
+    }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
@@ -80,6 +108,8 @@ public class PostActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
+
+        uploadedImage = findViewById(R.id.postImagesContainer);
 
         topAppBar = findViewById(R.id.header);
         setSupportActionBar(topAppBar);
@@ -160,17 +190,13 @@ public class PostActivity extends AppCompatActivity {
     }
 
     private void uploadPost() {
-        if (postTagCG.getChildCount() > 0 && !postDescription.getText().toString().isEmpty()) {
+        if (postTagCG.getChildCount() > 0 && !postDescription.getText().toString().isEmpty() && imageUrlList.size() == imageUriList.size()) {
             final ACProgressFlower dialog = new ACProgressFlower.Builder(PostActivity.this)
                     .direction(ACProgressConstant.DIRECT_CLOCKWISE)
                     .themeColor(getResources().getColor(R.color.colorPrimary))
                     .text("Uploading...")
                     .fadeColor(Color.DKGRAY).build();
             dialog.show();
-
-            if (imageUriList.size() >= 1) {
-                uploadImage();
-            }
 
             String[] tagArray = new String[postTagCG.getChildCount()];
             String description = postDescription.getText().toString();
@@ -218,14 +244,14 @@ public class PostActivity extends AppCompatActivity {
                         while (currentImageSelect < countClipData) {
                             imageUri = data.getClipData().getItemAt(currentImageSelect).getUri();
                             imageUriList.add(imageUri);
-                            loadImage(imageUri);
+                            uploadImage(imageUri);
                             currentImageSelect = currentImageSelect + 1;
                         }
                         Toast.makeText(this, "You uploaded " + imageUriList.size() + " images.", Toast.LENGTH_SHORT).show();
                     } else {
                         imageUri = data.getData();
                         imageUriList.add(imageUri);
-                        loadImage(imageUri);
+                        uploadImage(imageUri);
                         Toast.makeText(this, "You uploaded 1 image.", Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -234,35 +260,32 @@ public class PostActivity extends AppCompatActivity {
         }
     }
 
-    private void uploadImage() {
-        for (int i = 0; i < imageUriList.size(); i++) {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy_hh-mm-ss", Locale.ENGLISH);
-            String dateTime = dateFormat.format(Calendar.getInstance().getTime());
-            Uri uri = imageUriList.get(i);
-            postsStorageRef.child(dateTime + "_" + i + ".jpg")
-                    .putFile(uri)
-                    .addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                            if (task.isSuccessful()) {
-                                Task<Uri> result = task.getResult().getMetadata().getReference().getDownloadUrl();
-                                result.addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                    @Override
-                                    public void onSuccess(Uri uri) {
-                                        final String imageUrl = uri.toString();
-                                        imageUrlList.add(imageUrl);
-                                    }
-                                });
-                            } else {
-                                Log.d(TAG, task.getException().getMessage());
-                            }
+    private void uploadImage(Uri imageUri) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy_hh-mm-ss", Locale.ENGLISH);
+        String dateTime = dateFormat.format(Calendar.getInstance().getTime());
+        postsStorageRef.child(dateTime + "_" + imageUriList.size() + ".jpg")
+                .putFile(imageUri)
+                .addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            Task<Uri> result = task.getResult().getMetadata().getReference().getDownloadUrl();
+                            result.addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    final String imageUrl = uri.toString();
+                                    imageUrlList.add(imageUrl);
+                                    loadImage(imageUrl);
+                                }
+                            });
+                        } else {
+                            Log.d(TAG, task.getException().getMessage());
                         }
-                    });
-        }
+                    }
+                });
     }
 
-    private void loadImage(Uri imageUri) {
-        final LinearLayout uploadedImage = findViewById(R.id.postImagesContainer);
+    private void loadImage(String imageUrl) {
         LayoutInflater inflater = LayoutInflater.from(PostActivity.this);
         View view = inflater.inflate(R.layout.upload_image_item_layout, uploadedImage, false);
         final ImageView postImage = view.findViewById(R.id.postImage);
@@ -270,13 +293,17 @@ public class PostActivity extends AppCompatActivity {
             ((ViewGroup) postImage.getParent()).removeView(postImage);
         }
         uploadedImage.addView(postImage);
-        Picasso.get().load(imageUri).into(postImage);
+        Picasso.get().load(imageUrl).into(postImage);
         postImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 uploadedImage.removeView(postImage);
             }
         });
+    }
+
+    private void clearImage() {
+        uploadedImage.removeAllViews();
     }
 
 }

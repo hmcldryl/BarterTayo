@@ -1,6 +1,5 @@
 package com.opustech.bartertayo.ui;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -24,8 +23,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.opustech.bartertayo.R;
 import com.squareup.picasso.Picasso;
 
-public class ProfileActivity extends AppCompatActivity {
-
+public class ProfileEditActivity extends AppCompatActivity {
     private Toolbar topAppBar;
     private TextView profileDisplayName, profileFullname, profileFollowing, profileFollowers, profileBio;
     private ImageView profileImage;
@@ -34,9 +32,6 @@ public class ProfileActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private DocumentReference userRef;
     private String currentUserID;
-    private TabLayout tabLayout;
-    private ViewPager viewPager;
-    private ProfileViewPagerAdapter profileViewPagerAdapter;
 
     private String KEY_DISPLAY_NAME = "display_name";
     private String KEY_FIRST_NAME = "first_name";
@@ -51,7 +46,7 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
+        setContentView(R.layout.activity_profile_edit);
 
         userAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
@@ -77,15 +72,6 @@ public class ProfileActivity extends AppCompatActivity {
         profileFollowers = findViewById(R.id.userProfileFollowers);
         profileBarterScore = findViewById(R.id.userProfileBarterScore);
         profileBio = findViewById(R.id.userProfileBio);
-
-
-        viewPager = findViewById(R.id.profileViewPager);
-        tabLayout = findViewById(R.id.profileTab);
-        profileViewPagerAdapter = new ProfileViewPagerAdapter(getSupportFragmentManager());
-        profileViewPagerAdapter.add(new ProfileUserPostsFragment());
-        profileViewPagerAdapter.add(new ProfileUserDealsFragment());
-        viewPager.setAdapter(profileViewPagerAdapter);
-        tabLayout.setupWithViewPager(viewPager);
     }
 
     @Override
@@ -93,7 +79,7 @@ public class ProfileActivity extends AppCompatActivity {
         super.onStart();
         FirebaseUser currentUser = userAuth.getCurrentUser();
         if (currentUser == null) {
-            Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
+            Intent intent = new Intent(ProfileEditActivity.this, LoginActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
             finish();

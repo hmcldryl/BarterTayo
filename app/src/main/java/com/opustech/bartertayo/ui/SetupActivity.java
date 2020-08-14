@@ -215,7 +215,7 @@ public class SetupActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 assert result != null;
                 Uri resultUri = result.getUri();
-                FirebaseStorage.getInstance().getReference().child(currentUserID).child("profile_image")
+                FirebaseStorage.getInstance().getReference().child(currentUserID)
                         .child(currentUserID + ".jpg")
                         .putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                     @Override

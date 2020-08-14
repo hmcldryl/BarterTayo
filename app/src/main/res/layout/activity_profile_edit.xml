@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
-    tools:context=".ui.ProfileActivity">
+    tools:context=".ui.ProfileEditActivity">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/header"
@@ -15,7 +15,7 @@
         android:elevation="8dp"
         app:layout_scrollFlags="scroll|enterAlways"
         app:navigationIcon="@drawable/ic_button_back"
-        app:title="Your BarterTayo Profile" />
+        app:title="Edit Profile" />
 
     <ImageView
         android:id="@+id/userProfilePhotoCover"
@@ -42,27 +42,57 @@
             android:background="@drawable/placeholder_userpicture"
             android:elevation="8dp" />
 
-        <TextView
-            android:id="@+id/userProfileName"
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:fontFamily="@font/montserrat_bold"
-            android:text="display_name"
-            android:textAlignment="center"
-            android:textColor="@color/textColor"
-            android:textSize="20sp" />
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:hint="Display name"
+            app:boxStrokeColor="@color/iconTint"
+            app:counterTextColor="@color/textColorHint"
+            app:hintTextColor="@color/textColorHint">
 
-        <TextView
-            android:id="@+id/userProfileFullName"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/userProfileName"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/montserrat"
+                android:gravity="top"
+                android:inputType="textMultiLine"
+                android:textColorHint="@color/textColorHint"
+                android:textCursorDrawable="@null"
+                android:textSize="15sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:fontFamily="@font/montserrat"
-            android:text="full_name"
-            android:textAlignment="center"
-            android:textColor="#BF121212"
-            android:textSize="16sp" />
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:hint="Full name"
+            app:boxStrokeColor="@color/iconTint"
+            app:counterTextColor="@color/textColorHint"
+            app:hintTextColor="@color/textColorHint">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/userProfileFullName"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/montserrat"
+                android:gravity="top"
+                android:inputType="textMultiLine"
+                android:textColorHint="@color/textColorHint"
+                android:textCursorDrawable="@null"
+                android:textSize="15sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.chip.Chip
             android:id="@+id/userProfileBarterScore"
@@ -114,51 +144,33 @@
                 android:textSize="16sp" />
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/userProfileBio"
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="300dp"
-            android:layout_height="wrap_content"
+            android:layout_height="125dp"
             android:layout_gravity="center"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:ellipsize="end"
-            android:fontFamily="@font/montserrat"
-            android:maxLength="160"
-            android:maxLines="3"
-            android:text="bio"
-            android:textAlignment="center"
-            android:textColor="@color/textColor"
-            android:textSize="18sp" />
+            android:layout_marginEnd="10dp"
+            android:hint="Your bio"
+            app:boxStrokeColor="@color/iconTint"
+            app:counterEnabled="true"
+            app:counterMaxLength="160"
+            app:counterTextColor="@color/textColorHint"
+            app:hintTextColor="@color/textColorHint">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="6dp"
-            android:background="@color/colorPrimary" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/userProfileBio"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/montserrat"
+                android:gravity="top"
+                android:inputType="textMultiLine"
+                android:textColorHint="@color/textColorHint"
+                android:textCursorDrawable="@null"
+                android:textSize="15sp" />
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/profileTab"
-            style="Widget.MaterialComponents.TabLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Posts"
-                android:textAlignment="center" />
-
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Deals" />
-
-        </com.google.android.material.tabs.TabLayout>
-
-        <androidx.viewpager.widget.ViewPager
-            android:id="@+id/profileViewPager"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/background_body" />
+        </com.google.android.material.textfield.TextInputLayout>
 
     </LinearLayout>
 

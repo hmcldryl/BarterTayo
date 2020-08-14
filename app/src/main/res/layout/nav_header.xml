@@ -9,9 +9,10 @@
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <ImageView
+        android:id="@+id/userProfilePhotoDrawerCover"
         android:layout_width="match_parent"
         android:layout_height="180dp"
-        android:src="@drawable/background_body" />
+        android:background="@drawable/placeholder_userpicture_cover" />
 
     <LinearLayout
         android:layout_width="match_parent"
